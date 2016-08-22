@@ -1,4 +1,4 @@
 node_modules/*
-static/hargid.js
-static/hagrid.js.map
+static/js/hagrid.js
+static/js/hagrid.js.map
 hagrid
