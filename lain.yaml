@@ -1,5 +1,10 @@
 appname: hagrid
 
-prepare:
-    version: 0
-    
+build:
+    base: laincloud/centos-lain:20160503
+    prepare:
+        version: 1
+        script:
+
+    script:
+        - ln -s /lain/app $GOPATH/src/github.com/laincloud/hagrid

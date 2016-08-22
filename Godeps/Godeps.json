@@ -1,0 +1,52 @@
+{
+	"ImportPath": "github.com/laincloud/hagrid",
+	"GoVersion": "go1.6",
+	"GodepVersion": "v70",
+	"Packages": [
+		"./..."
+	],
+	"Deps": [
+		{
+			"ImportPath": "github.com/go-sql-driver/mysql",
+			"Comment": "v1.2-118-g3dd7008",
+			"Rev": "3dd7008ac1529aca1bcd8a9db75228a71ba23cac"
+		},
+		{
+			"ImportPath": "github.com/gorilla/context",
+			"Comment": "v1.1-4-gaed02d1",
+			"Rev": "aed02d124ae4a0e94fea4541c8effd05bf0c8296"
+		},
+		{
+			"ImportPath": "github.com/gorilla/mux",
+			"Comment": "v1.1-20-g7804150",
+			"Rev": "780415097119f6f61c55475fe59b66f3c3e9ea53"
+		},
+		{
+			"ImportPath": "github.com/gorilla/securecookie",
+			"Comment": "v1.1-2-gff35634",
+			"Rev": "ff356348f74133a59d3e93aa24b5b4551b6fe90d"
+		},
+		{
+			"ImportPath": "github.com/gorilla/sessions",
+			"Rev": "56ba4b0a11da87516629a57408a5f7e4c8ea7b0b"
+		},
+		{
+			"ImportPath": "github.com/jinzhu/gorm",
+			"Comment": "v1.0-50-ga646b13",
+			"Rev": "a646b13548ec0aa812fe805b2780f460dd2771b6"
+		},
+		{
+			"ImportPath": "github.com/jinzhu/inflection",
+			"Rev": "8f4d3a0d04ce0b7c0cf3126fb98524246d00d102"
+		},
+		{
+			"ImportPath": "github.com/mijia/sweb/log",
+			"Rev": "14329ad4fe2a6f7a337bb9518127dc9982134a54"
+		},
+		{
+			"ImportPath": "github.com/pborman/uuid",
+			"Comment": "v1.0-11-gc55201b",
+			"Rev": "c55201b036063326c5b1b89ccfe45a184973d073"
+		}
+	]
+}
