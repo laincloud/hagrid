@@ -3,11 +3,12 @@ appname: hagrid
 build:
     base: laincloud/centos-lain:20160503
     prepare:
-        version: 2
+        version: 3
         script:
-            - npm install -g webpack webpack-dev-server react@0.14.7 react-dom@0.14.7 babel-core babel-loader babel-preset-es2015 babel-preset-react
+            - npm install -g webpack webpack-dev-server
             - mkdir -p /go/src/github.com/laincloud
     script:
+        - npm install react react-dom babel-core babel-loader babel-preset-es2015 babel-preset-react
         - ln -s /lain/app $GOPATH/src/github.com/laincloud/hagrid
         - go build -o hagrid $GOPATH/src/github.com/laincloud/hagrid/main.go
         - webpack
@@ -20,17 +21,23 @@ web:
         - hagrid.conf.json
 
 web.icinga:
-  image: laincloud/icinga2:20160804
-  memory: 256M
-  cmd: supervisord
-  port: 80
-  mountpoint:
-    - icinga.lain.cloud
-  https_only: true
-  persistent_dirs:
-     - /var/lib/icinga2
-  logs:
-    - icingaweb2.log
+    image: registry.lain.cloud/icinga2:20160826
+    memory: 256M
+    cmd: ./run_icinga.sh
+    port: 80
+    env:
+        - SMTP_HOST=lain.example
+        - SMS_HOST=lain.example
+        - HTTP_PROXY=proxy.bdp.idc
+        - HTTPS_PROXY=proxy.bdp.idc
+    mountpoint:
+        - icinga.lain.cloud
+    https_only: true
+    stateful: true
+    persistent_dirs:
+        - /var/lib/icinga2
+    logs:
+        - icingaweb2.log
 
 
 use_services:

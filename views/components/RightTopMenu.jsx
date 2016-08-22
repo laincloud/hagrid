@@ -8,7 +8,6 @@ var AddAlertModal = React.createClass({
         e.preventDefault();
         var formData = {
             name: this.refs.name.value.trim(),
-            source: this.refs.source.value.trim(),
             enabled: this.refs.isEnabled.checked,
         };
 
@@ -50,13 +49,6 @@ var AddAlertModal = React.createClass({
                                     </label>
                                     <div className="col-md-3 col-sm-3 col-xs-12">
                                         <input type="text" ref="name" id="new_alert_name" required="required" className="form-control col-md-7 col-xs-12" defaultValue=""/>
-                                    </div>
-                                </div>
-                                <div className="form-group">
-                                    <label className="control-label col-md-3 col-sm-3 col-xs-12" htmlFor="new_alert_source">Source <span className="required">*</span>
-                                    </label>
-                                    <div className="col-md-3 col-sm-3 col-xs-12">
-                                        <input type="text" ref="source" id="new_alert_source" required="required" className="form-control col-md-7 col-xs-12" defaultValue=""/>
                                     </div>
                                 </div>
 

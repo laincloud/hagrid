@@ -35,7 +35,6 @@ func AddAlertHandler(w http.ResponseWriter, r *http.Request) {
 
 	newAlert := &models.Alert{
 		Name:    r.FormValue("name"),
-		Source:  r.FormValue("source"),
 		Enabled: enabled,
 		Admins:  []models.User{*user},
 	}
@@ -63,7 +62,6 @@ func UpdateAlertHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	newAlert.Source = r.FormValue("source")
 	newAlert.Enabled = enabled
 
 	if err := models.SaveAlert(newAlert); err != nil {
@@ -135,9 +133,9 @@ func DeleteAlertHandler(w http.ResponseWriter, r *http.Request) {
 func SynchronizeAlertHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, _ := strconv.Atoi(vars["id"])
-	// if _, err := authorize(w, r, id); err != nil {
-	// 	return
-	// }
+	if _, err := authorize(w, r, id); err != nil {
+		return
+	}
 	if err := models.SynchronizeAlert(id); err != nil {
 		writeResponse(w, "Synchronize alert to icinga error: "+err.Error(), http.StatusInternalServerError)
 		return

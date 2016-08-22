@@ -15,7 +15,6 @@ type Alert struct {
 	ID        int        `gorm:"primary_key"`
 	Name      string     `gorm:"type:varchar(64);not null;unique"`
 	Enabled   bool       `gorm:"not null"`
-	Source    string     `gorm:"type:varchar(64);not null"`
 	Services  []Service  `gorm:"ForeignKey:AlertID"`
 	Templates []Template `gorm:"ForeignKey:AlertID"`
 	Notifiers []User     `gorm:"many2many:alert_to_user_notify"`
@@ -79,7 +78,7 @@ func (al *Alert) generateIcinga2Config() ([]Icinga2Apply, []Icinga2Service) {
 					Name:       fmt.Sprintf("%s-%s", al.Name, service.Metric),
 					Warning:    service.Warning,
 					Critical:   service.Critical,
-					MetricURL:  fmt.Sprintf("%s/render?target=%s", al.Source, service.Metric),
+					MetricURL:  fmt.Sprintf("%s/render?target=%s", config.GetSource(), service.Metric),
 					MetricType: metricType[service.CheckType],
 				}
 				icinga2Services = append(icinga2Services, newService)
@@ -99,7 +98,7 @@ func (al *Alert) generateIcinga2Config() ([]Icinga2Apply, []Icinga2Service) {
 									Name:       fmt.Sprintf("%s-%s-%s", al.Name, service.Name, realMetric),
 									Warning:    service.Warning,
 									Critical:   service.Critical,
-									MetricURL:  fmt.Sprintf("%s/render?target=%s", al.Source, realMetric),
+									MetricURL:  fmt.Sprintf("%s/render?target=%s", config.GetSource(), realMetric),
 									MetricType: metricType[service.CheckType],
 								}
 								icinga2Services = append(icinga2Services, newService)
@@ -186,7 +185,7 @@ func SynchronizeAlert(id int) error {
 	}
 	pkgName := alertPackagePrefix + strconv.Itoa(id)
 	// If the alert is not enabled, nothing will sync to icinga2, we only need to remove the package
-	if !alert.Enabled || alert.Source == "" {
+	if !alert.Enabled || config.GetSource() == "" {
 		icinga2Client.DeletePackage(pkgName)
 		return nil
 	}

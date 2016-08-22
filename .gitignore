@@ -2,3 +2,4 @@ node_modules/*
 static/js/hagrid.js
 static/js/hagrid.js.map
 hagrid
+hagrid.conf.json

@@ -22,7 +22,6 @@ var AlertForm = React.createClass({
 
         e.preventDefault();
         var formData = {
-            source: this.refs.source.value.trim(),
             enabled: this.refs.isEnabled.checked,
         };
         $.ajax({
@@ -83,14 +82,6 @@ var AlertForm = React.createClass({
 
         return <form id="alert_form" data-parsley-validate className="form-horizontal form-label-left" onSubmit={this.handleSubmit}>
             <div className="form-group">
-                <label className="control-label col-md-3 col-sm-3 col-xs-12" htmlFor="update_alert_source">Source <span className="required">*</span>
-                </label>
-                <div className="col-md-3 col-sm-3 col-xs-12">
-                    <input type="text" ref="source" id="update_alert_source" required="required" className="form-control col-md-7 col-xs-12" defaultValue={this.props.source}/>
-                </div>
-            </div>
-
-            <div className="form-group">
 
                 <label className="control-label col-md-3 col-sm-3 col-xs-12" htmlFor="update_alert_enabled">Enabled <span className="required">*</span>
                 </label>
@@ -101,7 +92,7 @@ var AlertForm = React.createClass({
 
             <div className="form-group">
                 <div className="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                    <button type="submit" className="btn btn-success">Update</button>
+                    <button type="submit" className="btn btn-success">Save</button>
                     <button type="button" className="btn btn-warning" onClick={this.handleSync}>Sync</button>
                     <button type="button" className="btn btn-danger" data-toggle="modal" data-target="#delete_alert_modal_window">Delete</button>
                 </div>

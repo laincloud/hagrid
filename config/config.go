@@ -27,6 +27,8 @@ type HagridConfig struct {
 	Icinga2NotificationTypes []string `json:"icinga2_notification_types"`
 
 	SuperUser string `json:"superuser"`
+
+	Source string `json:"source"`
 }
 
 var hagridConfig HagridConfig
@@ -111,4 +113,8 @@ func GetIcinga2APIPassword() string {
 
 func GetIcinga2NotificationTypes() []string {
 	return hagridConfig.Icinga2NotificationTypes
+}
+
+func GetSource() string {
+	return hagridConfig.Source
 }

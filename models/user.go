@@ -11,8 +11,8 @@ import (
 type User struct {
 	ID               int    `gorm:"primary_key:true"`
 	Name             string `gorm:"type:varchar(64);not null;unique"`
-	EmailAddress     string `gorm:"type:varchar(64);not null;unique"`
-	PhoneNumber      string `gorm:"type:varchar(64);not null;unique"`
+	EmailAddress     string `gorm:"type:varchar(64);not null"`
+	PhoneNumber      string `gorm:"type:varchar(64);not null"`
 	BearychatTeam    string `gorm:"type:varchar(64);not null"`
 	BearychatToken   string `gorm:"type:varchar(64);not null"`
 	BearychatChannel string `gorm:"type:varchar(64);not null"`

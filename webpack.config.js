@@ -26,7 +26,7 @@ module.exports = {
         }]
     },
     resolve: {
-        extensions: ['', '.js', '.jsx'],
-        fallback: "/usr/local/lib/node_modules"
+        root: path.join(__dirname, 'node_modules'),
+        extensions: ['', '.js', '.jsx']
     }
 };
