@@ -1,0 +1,13 @@
+{{ range $service := .Services }}
+apply Service "{{$service.Name}}" {
+  import "generic-service"
+  check_command = "check_graphite_metric"
+  vars.metric_warning = {{$service.Warning}}
+  vars.metric_critical = {{$service.Critical}}
+  vars.metric_url = "{{$service.MetricURL}}"
+  vars.metric_type = "{{$service.MetricType}}"
+  vars.service_id = "{{$service.ID}}"
+  assign where host.name == NodeName
+}
+
+{{ end }}

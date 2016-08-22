@@ -1,0 +1,15 @@
+{{range $user := .Users}}
+object User "{{$user.Name}}" {
+  import "generic-user"
+  email = "{{$user.EmailAddress}}"
+  groups = []
+  vars.mobile = "{{$user.PhoneNumber}}"
+  vars.bearychat_team = "{{$user.BearychatTeam}}"
+  vars.bearychat_channel = "{{$user.BearychatChannel}}"
+  vars.bearychat_token = "{{$user.BearychatToken}}"
+  vars.pushbullet_token = "{{$user.PushbulletToken}}"
+  vars.slack_channel = "{{$user.SlackChannel}}"
+  vars.slack_token = "{{$user.SlackToken}}"
+}
+
+{{ end }}

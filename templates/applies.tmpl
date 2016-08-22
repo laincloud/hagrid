@@ -1,0 +1,9 @@
+{{ range $apply := .Applies }}
+apply Notification "{{$apply.Name}}" to Service {
+  import "{{$apply.NotificationType}}-service-notification"
+  user_groups = []
+  users = {{$apply.Users}}
+  assign where service.name == "{{$apply.ServiceName}}"
+}
+
+{{end}}

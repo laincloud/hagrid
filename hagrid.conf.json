@@ -1,0 +1,18 @@
+{
+    "db_host": "192.168.10.24",
+    "db_port": 3301,
+    "db_user": "root",
+    "db_password": "",
+    "db_name": "test_hagrid",
+    "db_debug": false,
+    "db_migrate": false,
+    "auth_sso_url": "http://sso.lain.cloud",
+    "auth_client_id": 5,
+    "auth_secret": "gjmlsj7MwshpSa4eTzPDtQ",
+    "auth_redirect_uri": "http://127.0.0.1:8080/",
+    "icinga2_api_address": "https://hedwig-web.lain.cloud",
+    "icinga2_api_user": "root",
+    "icinga2_api_password": "icinga",
+    "icinga2_notification_types": ["sms", "email", "bearychat"],
+    "superuser": "admin"
+}
