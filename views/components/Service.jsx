@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {popUpMessagePanel} from './Common'
+import METRIC_HINTS from './metricHints'
 
 var AddServiceForm = React.createClass({
 
@@ -12,6 +13,7 @@ var AddServiceForm = React.createClass({
             checkType: this.refs.checkType.value,
             warning: this.refs.warning.value.trim(),
             critical: this.refs.critical.value.trim(),
+            checkAttempts: this.refs.checkAttempts.value.trim(),
             enabled: this.refs.enabled.checked
         };
 
@@ -32,16 +34,22 @@ var AddServiceForm = React.createClass({
 
     componentDidMount: function() {
         new Switchery(document.querySelector("#add_service_enabled"), {color: '#26B99A', size: 'large'});
+        $("#add_service_metric").autocomplete({
+            lookup: METRIC_HINTS,
+            onSelect: function(suggestion) {
+                $("#add_service_metric").val(suggestion.data);
+            }
+        });
     },
 
     render: function() {
         return (
             <tr className="odd" >
                 <td className=" ">
-                    <input type="text" ref="name" id="add_service_name" placeholder="name(required)" required="required" className="form-control col-md-7 col-xs-12" />
+                    <input type="text" ref="name" id="add_service_name" placeholder="name" required="required" className="form-control col-md-7 col-xs-12" />
                 </td>
                 <td className=" ">
-                    <input type="text" ref="metric" id="add_service_metric" placeholder="x.x.x.x(required)" required="required" className="form-control col-md-7 col-xs-12" />
+                    <input type="text" ref="metric" id="add_service_metric" placeholder="x.x.x.x" required="required" className="form-control col-md-7 col-xs-12" />
                 </td>
                 <td className=" ">
                     <select className="form-control" ref="checkType" id="add_service_check_type">
@@ -52,10 +60,13 @@ var AddServiceForm = React.createClass({
                     </select>
                 </td>
                 <td className=" ">
-                    <input type="text" ref="warning" id="add_service_warning" placeholder="float(required)" required="required" className="form-control col-md-7 col-xs-12" />
+                    <input type="text" ref="warning" id="add_service_warning" placeholder="float" required="required" className="form-control col-md-7 col-xs-12" />
                 </td>
                 <td className=" ">
-                    <input type="text" ref="critical" id="add_service_critical" placeholder="float(required)" required="required" className="form-control col-md-7 col-xs-12" />
+                    <input type="text" ref="critical" id="add_service_critical" placeholder="float" required="required" className="form-control col-md-7 col-xs-12" />
+                </td>
+                <td className=" ">
+                    <input type="text" ref="checkAttempts" id="add_service_check_attempts" placeholder="integer" required="required" className="form-control col-md-7 col-xs-12" />
                 </td>
                 <td className=" ">
                     <input type="checkbox" ref="enabled" id="add_service_enabled" className="js-switch" data-switchery="true" />
@@ -98,6 +109,7 @@ var ServiceRow = React.createClass({
             checkType: this.refs.checkType.value,
             warning: this.refs.warning.value.trim(),
             critical: this.refs.critical.value.trim(),
+            checkAttempts: this.refs.checkAttempts.value.trim(),
             enabled: this.refs.enabled.checked
         };
 
@@ -161,6 +173,7 @@ var ServiceRow = React.createClass({
                     <td className=" "><span className="label label-primary">{this.props.service.CheckType}</span></td>
                     <td className=" "><span className="label label-warning">{this.props.service.Warning}</span></td>
                     <td className=" "><span className="label label-danger">{this.props.service.Critical}</span></td>
+                    <td className=" ">{this.props.service.CheckAttempts}</td>
                     <td className="a-right a-right "><span className={enabledClass} aria-hidden="true"></span></td>
                     <td className=" last">
                         <button type="button" className="btn btn-success btn-xs" aria-label="Left Align" onClick={this.changeMode}>
@@ -180,7 +193,12 @@ var ServiceRow = React.createClass({
                         <input type="text" ref="name" required="required" className="form-control col-md-7 col-xs-12" defaultValue={this.props.service.Name}/>
                     </td>
                     <td className=" ">
-                        <input type="text" ref="metric" required="required" className="form-control col-md-7 col-xs-12" defaultValue={this.props.service.Metric}/>
+                        <input type="text"
+                               id={"update_service_metric_"+this.props.service.ID}
+                               ref="metric"
+                               required="required"
+                               className="form-control col-md-7 col-xs-12"
+                               defaultValue={this.props.service.Metric}/>
                     </td>
                     <td className=" ">
                         <select className="form-control" ref="checkType" defaultValue={this.props.service.CheckType}>
@@ -191,10 +209,13 @@ var ServiceRow = React.createClass({
                         </select>
                     </td>
                     <td className=" ">
-                        <input type="text" ref="warning" placeholder="float(required)" required="required" className="form-control col-md-7 col-xs-12" defaultValue={this.props.service.Warning}/>
+                        <input type="text" ref="warning" placeholder="float" required="required" className="form-control col-md-7 col-xs-12" defaultValue={this.props.service.Warning}/>
                     </td>
                     <td className=" ">
-                        <input type="text" ref="critical" placeholder="float(required)" required="required" className="form-control col-md-7 col-xs-12" defaultValue={this.props.service.Critical}/>
+                        <input type="text" ref="critical" placeholder="float" required="required" className="form-control col-md-7 col-xs-12" defaultValue={this.props.service.Critical}/>
+                    </td>
+                    <td className=" ">
+                        <input type="text" ref="checkAttempts" placeholder="integer" required="required" className="form-control col-md-7 col-xs-12" defaultValue={this.props.service.CheckAttempts}/>
                     </td>
                     <td className=" ">
                         <input type="checkbox"
@@ -255,6 +276,7 @@ var ServicesTable = React.createClass({
                         <th className="col-sm-1">CheckType </th>
                         <th className="col-sm-1">Warning </th>
                         <th className="col-sm-1">Critical </th>
+                        <th className="col-sm-1">CheckAttempts </th>
                         <th className="col-sm-1">Enabled </th>
                         <th className="col-sm-2 no-link last"><span className="nobr">Action</span></th>
                     </tr>

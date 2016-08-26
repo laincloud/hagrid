@@ -10,15 +10,16 @@ const (
 )
 
 type Service struct {
-	ID        int    `gorm:"primary_key"`
-	AlertID   int    `gorm:"not null"`
-	Name      string `gorm:"type:varchar(64);not null;unique"`
-	Metric    string `gorm:"type:varchar(1024);not null"`
-	Warning   string `gorm:"type:varchar(32);not null"`
-	Critical  string `gorm:"type:varchar(32);not null"`
-	Enabled   bool   `gorm:"not null"`
-	CheckType string `gorm:"type:varchar(16);not null"`
-	CreatedAt time.Time
+	ID            int    `gorm:"primary_key"`
+	AlertID       int    `gorm:"not null"`
+	Name          string `gorm:"type:varchar(64);not null;unique"`
+	Metric        string `gorm:"type:varchar(1024);not null"`
+	CheckAttempts int    `gorm:"not null; default 3"`
+	Warning       string `gorm:"type:varchar(32);not null"`
+	Critical      string `gorm:"type:varchar(32);not null"`
+	Enabled       bool   `gorm:"not null"`
+	CheckType     string `gorm:"type:varchar(16);not null"`
+	CreatedAt     time.Time
 
 	Alert Alert `gorm:"ForeignKey:AlertID"`
 }

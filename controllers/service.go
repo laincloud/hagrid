@@ -58,14 +58,24 @@ func AddServiceHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	checkAttempts, err := strconv.Atoi(r.FormValue("checkAttempts"))
+	if err != nil {
+		writeResponse(w, "CheckAttempts must be an integer", 422)
+		return
+	}
+	if checkAttempts < 1 {
+		writeResponse(w, "CheckAttempts must not be less than 1", http.StatusBadRequest)
+	}
+
 	service := &models.Service{
-		Name:      r.FormValue("name"),
-		Enabled:   enabled,
-		Metric:    r.FormValue("metric"),
-		Warning:   r.FormValue("warning"),
-		Critical:  r.FormValue("critical"),
-		AlertID:   alertID,
-		CheckType: checkType,
+		Name:          r.FormValue("name"),
+		Enabled:       enabled,
+		Metric:        r.FormValue("metric"),
+		Warning:       r.FormValue("warning"),
+		Critical:      r.FormValue("critical"),
+		CheckAttempts: checkAttempts,
+		AlertID:       alertID,
+		CheckType:     checkType,
 	}
 
 	if err := models.SaveService(service); err != nil {
@@ -172,11 +182,21 @@ func UpdateServiceHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	checkAttempts, err := strconv.Atoi(r.FormValue("checkAttempts"))
+	if err != nil {
+		writeResponse(w, "CheckAttempts must be an integer", 422)
+		return
+	}
+	if checkAttempts < 1 {
+		writeResponse(w, "CheckAttempts must not be less than 1", http.StatusBadRequest)
+	}
+
 	service.Name = r.FormValue("name")
 	service.Enabled = enabled
 	service.Metric = r.FormValue("metric")
 	service.Warning = r.FormValue("warning")
 	service.Critical = r.FormValue("critical")
+	service.CheckAttempts = checkAttempts
 	service.CheckType = checkType
 
 	if err = models.SaveService(&service); err != nil {

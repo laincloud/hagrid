@@ -2,6 +2,7 @@
 apply Service "{{$service.Name}}" {
   import "generic-service"
   check_command = "check_graphite_metric"
+  max_check_attempts = {{$service.CheckAttempts}}
   vars.metric_warning = {{$service.Warning}}
   vars.metric_critical = {{$service.Critical}}
   vars.metric_url = "{{$service.MetricURL}}"

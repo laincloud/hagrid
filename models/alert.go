@@ -31,12 +31,13 @@ type Icinga2Apply struct {
 }
 
 type Icinga2Service struct {
-	ID         string
-	Name       string
-	Warning    string
-	Critical   string
-	MetricURL  string
-	MetricType string
+	ID            string
+	Name          string
+	Warning       string
+	Critical      string
+	CheckAttempts int
+	MetricURL     string
+	MetricType    string
 }
 
 var metricType = map[string]string{
@@ -74,12 +75,13 @@ func (al *Alert) generateIcinga2Config() ([]Icinga2Apply, []Icinga2Service) {
 			if !strings.ContainsRune(service.Metric, '$') {
 				// This service is not using template
 				newService := Icinga2Service{
-					ID:         strconv.Itoa(service.ID),
-					Name:       fmt.Sprintf("%s-%s", al.Name, service.Metric),
-					Warning:    service.Warning,
-					Critical:   service.Critical,
-					MetricURL:  fmt.Sprintf("%s/render?target=%s", config.GetSource(), service.Metric),
-					MetricType: metricType[service.CheckType],
+					ID:            strconv.Itoa(service.ID),
+					Name:          fmt.Sprintf("%s-%s", al.Name, service.Metric),
+					Warning:       service.Warning,
+					Critical:      service.Critical,
+					CheckAttempts: service.CheckAttempts,
+					MetricURL:     fmt.Sprintf("%s/render?target=%s", config.GetSource(), service.Metric),
+					MetricType:    metricType[service.CheckType],
 				}
 				icinga2Services = append(icinga2Services, newService)
 				icinga2Applies = append(icinga2Applies, newService.generateApplies(notifiersStr)...)
@@ -94,12 +96,13 @@ func (al *Alert) generateIcinga2Config() ([]Icinga2Apply, []Icinga2Service) {
 							if trimedValue != "" {
 								realMetric := strings.Replace(service.Metric, replacedStr, trimedValue, -1)
 								newService := Icinga2Service{
-									ID:         fmt.Sprintf("%d-%d-%s", service.ID, tmpl.ID, trimedValue),
-									Name:       fmt.Sprintf("%s-%s-%s", al.Name, service.Name, realMetric),
-									Warning:    service.Warning,
-									Critical:   service.Critical,
-									MetricURL:  fmt.Sprintf("%s/render?target=%s", config.GetSource(), realMetric),
-									MetricType: metricType[service.CheckType],
+									ID:            fmt.Sprintf("%d-%d-%s", service.ID, tmpl.ID, trimedValue),
+									Name:          fmt.Sprintf("%s-%s-%s", al.Name, service.Name, realMetric),
+									Warning:       service.Warning,
+									Critical:      service.Critical,
+									CheckAttempts: service.CheckAttempts,
+									MetricURL:     fmt.Sprintf("%s/render?target=%s", config.GetSource(), realMetric),
+									MetricType:    metricType[service.CheckType],
 								}
 								icinga2Services = append(icinga2Services, newService)
 								icinga2Applies = append(icinga2Applies, newService.generateApplies(notifiersStr)...)

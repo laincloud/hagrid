@@ -21,15 +21,10 @@ web:
         - hagrid.conf.json
 
 web.icinga:
-    image: registry.lain.cloud/icinga2:20160826
+    image: registry.lain.cloud/icinga2:20160829
     memory: 256M
     cmd: ./run_icinga.sh
     port: 80
-    env:
-        - SMTP_HOST=lain.example
-        - SMS_HOST=lain.example
-        - HTTP_PROXY=proxy.bdp.idc
-        - HTTPS_PROXY=proxy.bdp.idc
     mountpoint:
         - icinga.lain.cloud
     https_only: true
