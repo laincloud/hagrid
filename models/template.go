@@ -28,3 +28,9 @@ func SaveTemplate(template *Template) error {
 func DeleteTemplate(templateID int) error {
 	return db.Delete(Template{}, templateID).Error
 }
+
+func IsTemplateDuplicated(name string, alertID int) bool {
+	var count int
+	err := db.Model(&Template{}).Where("name = ? and alert_id = ?", name, alertID).Count(&count).Error
+	return count != 0 || err != nil
+}

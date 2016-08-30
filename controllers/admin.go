@@ -23,6 +23,11 @@ func AddAdminHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if models.IsNotifierDuplicated(alertID, adminID) {
+		writeResponse(w, "The admin is duplicated in this alert", http.StatusConflict)
+		return
+	}
+
 	if err = models.AddAdmin(alertID, adminID); err != nil {
 		writeResponse(w, err.Error(), http.StatusInternalServerError)
 		return

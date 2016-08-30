@@ -24,6 +24,12 @@ func AddNotifierHandler(w http.ResponseWriter, r *http.Request) {
 		writeResponse(w, "Field user_id must be an integer", http.StatusBadRequest)
 		return
 	}
+
+	if models.IsNotifierDuplicated(alertID, notifierID) {
+		writeResponse(w, "The notifier is duplicated in this alert", http.StatusConflict)
+		return
+	}
+
 	if err = models.AddNotifier(alertID, notifierID); err != nil {
 		writeResponse(w, err.Error(), http.StatusInternalServerError)
 		return

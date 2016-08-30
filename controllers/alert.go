@@ -33,6 +33,11 @@ func AddAlertHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if models.IsAlertDuplicated(r.FormValue("name")) {
+		writeResponse(w, "The alert's name is duplicated", http.StatusConflict)
+		return
+	}
+
 	newAlert := &models.Alert{
 		Name:    r.FormValue("name"),
 		Enabled: enabled,

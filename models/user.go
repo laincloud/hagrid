@@ -109,6 +109,12 @@ func AddNotifier(alertID, notifierID int) error {
 	return nil
 }
 
+func IsNotifierDuplicated(alertID, notifierID int) bool {
+	var count int
+	err := db.Exec("SELECT * from `alert_to_user_notify` where alert_id = ? and user_id = ?", alertID, notifierID).Count(&count)
+	return count != 0 || err != nil
+}
+
 func GetAdminsByAlertID(id int, admins *[]User) error {
 	if err := db.Model(&Alert{ID: id}).Select("id, name").Association("Admins").Find(admins).Error; err != nil {
 		log.Errorf("Getting admins of alert %d failed: %s", id, err.Error())
@@ -131,6 +137,12 @@ func AddAdmin(alertID, adminID int) error {
 		return fmt.Errorf("Adding admin failed. Ask admin for help")
 	}
 	return nil
+}
+
+func IsAdminDuplicated(alertID, adminID int) bool {
+	var count int
+	err := db.Exec("SELECT * from `alert_to_user_admin` where alert_id = ? and user_id = ?", alertID, adminID).Count(&count)
+	return count != 0 || err != nil
 }
 
 func renderUsers() error {

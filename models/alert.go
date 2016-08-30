@@ -148,6 +148,12 @@ func GetAllAlerts(alerts *[]Alert) error {
 	return nil
 }
 
+func IsAlertDuplicated(name string) bool {
+	var count int
+	err := db.Model(&Alert{}).Where("name = ?", name).Count(&count).Error
+	return count != 0 || err != nil
+}
+
 func GetDetailedAlert(alert *Alert, id int) error {
 	if err := GetAlert(alert, id); err != nil {
 		return err

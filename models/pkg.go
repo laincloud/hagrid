@@ -51,6 +51,7 @@ func init() {
 		db.Table("alert_to_user_notify").AddForeignKey("alert_id", "alerts(id)", "CASCADE", "RESTRICT")
 		db.Table("alert_to_user_notify").AddForeignKey("user_id", "users(id)", "CASCADE", "RESTRICT")
 		db.Model(&Template{}).AddUniqueIndex("unique_alert_template", "alert_id", "name")
+		db.Model(&Service{}).AddUniqueIndex("unique_alert_service", "alert_id", "name")
 	}
 
 	icinga2Client.Address = config.GetIcinga2APIAddress()
