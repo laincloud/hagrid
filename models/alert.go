@@ -76,7 +76,7 @@ func (al *Alert) generateIcinga2Config() ([]Icinga2Apply, []Icinga2Service) {
 				// This service is not using template
 				newService := Icinga2Service{
 					ID:            strconv.Itoa(service.ID),
-					Name:          fmt.Sprintf("%s-%s", al.Name, service.Metric),
+					Name:          fmt.Sprintf("%s-%s", al.Name, service.Name),
 					Warning:       service.Warning,
 					Critical:      service.Critical,
 					CheckAttempts: service.CheckAttempts,
@@ -97,7 +97,7 @@ func (al *Alert) generateIcinga2Config() ([]Icinga2Apply, []Icinga2Service) {
 								realMetric := strings.Replace(service.Metric, replacedStr, trimedValue, -1)
 								newService := Icinga2Service{
 									ID:            fmt.Sprintf("%d-%d-%s", service.ID, tmpl.ID, trimedValue),
-									Name:          fmt.Sprintf("%s-%s-%s", al.Name, service.Name, realMetric),
+									Name:          fmt.Sprintf("%s-%s[%s]", al.Name, service.Name, trimedValue),
 									Warning:       service.Warning,
 									Critical:      service.Critical,
 									CheckAttempts: service.CheckAttempts,
