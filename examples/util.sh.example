@@ -1,0 +1,6 @@
+#!/bin/bash
+
+export SMTP_HOST=""
+export HTTP_PROXY=""
+export HTTPS_PROXY=""
+export SMS_HOST=""

@@ -21,7 +21,7 @@ web:
         - hagrid.conf.json
 
 web.icinga:
-    image: registry.lain.cloud/icinga2:20160829
+    image: registry.lain.cloud/icinga2:20160830
     memory: 256M
     cmd: ./run_icinga.sh
     port: 80
@@ -29,6 +29,10 @@ web.icinga:
         - icinga.lain.cloud
     https_only: true
     stateful: true
+    secret_files:
+        - /etc/icinga2/features-available/ido-mysql.conf
+        - /etc/icinga2/scripts/util.sh
+        - /etc/icingaweb2/resource.ini
     persistent_dirs:
         - /var/lib/icinga2
     logs:

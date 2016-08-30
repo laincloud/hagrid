@@ -1,8 +1,8 @@
 {
-    "auth_sso_url": "http://sso.lain.cloud",
-    "auth_client_id": 5,
-    "auth_secret": "gjmlsj7MwshpSa4eTzPDtQ",
-    "auth_redirect_uri": "http://hagrid.lain.cloud/",
+    "auth_sso_url": "http://sso.lain.local",
+    "auth_client_id": 1,
+    "auth_secret": "abcdefg",
+    "auth_redirect_uri": "http://hagrid.lain.local/",
     "db_host": "mysql-master",
     "db_port": 3306,
     "db_user": "hagrid",
@@ -15,5 +15,5 @@
     "icinga2_api_password": "icinga",
     "icinga2_notification_types": ["sms", "email", "bearychat"],
     "superuser": "admin",
-    "source": "http://10.130.64.236:8888"
+    "source": "http://127.0.0.1:8888"
 }

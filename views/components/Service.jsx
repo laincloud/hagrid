@@ -173,7 +173,7 @@ var ServiceRow = React.createClass({
                     <td className=" "><span className="label label-primary">{this.props.service.CheckType}</span></td>
                     <td className=" "><span className="label label-warning">{this.props.service.Warning}</span></td>
                     <td className=" "><span className="label label-danger">{this.props.service.Critical}</span></td>
-                    <td className=" ">{this.props.service.CheckAttempts}</td>
+                    <td className=" "><span className="label label-default">{this.props.service.CheckAttempts}</span></td>
                     <td className="a-right a-right "><span className={enabledClass} aria-hidden="true"></span></td>
                     <td className=" last">
                         <button type="button" className="btn btn-success btn-xs" aria-label="Left Align" onClick={this.changeMode}>
