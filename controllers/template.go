@@ -23,7 +23,7 @@ func AddTemplateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if models.IsTemplateDuplicated(r.FormValue("name"), alertID) {
+	if models.IsTemplateDuplicated(r.FormValue("name"), alertID, 0) {
 		writeResponse(w, "The template name is duplicated in this alert", http.StatusConflict)
 		return
 	}
@@ -112,7 +112,7 @@ func UpdateTemplateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if models.IsTemplateDuplicated(r.FormValue("name"), template.AlertID) {
+	if models.IsTemplateDuplicated(r.FormValue("name"), template.AlertID, template.ID) {
 		writeResponse(w, "The template name is duplicated in this alert", http.StatusConflict)
 		return
 	}

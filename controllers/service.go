@@ -24,7 +24,7 @@ func AddServiceHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if models.IsServiceDuplicated(r.FormValue("name"), alertID) {
+	if models.IsServiceDuplicated(r.FormValue("name"), alertID, 0) {
 		writeResponse(w, "The service name is duplicated in this alert", http.StatusConflict)
 		return
 	}
@@ -153,7 +153,7 @@ func UpdateServiceHandler(w http.ResponseWriter, r *http.Request) {
 		writeResponse(w, "Service name is empty", http.StatusBadRequest)
 		return
 	}
-	if models.IsServiceDuplicated(r.FormValue("name"), service.AlertID) {
+	if models.IsServiceDuplicated(r.FormValue("name"), service.AlertID, service.ID) {
 		writeResponse(w, "The service name is duplicated in this alert", http.StatusConflict)
 		return
 	}

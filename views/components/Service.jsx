@@ -133,6 +133,18 @@ var ServiceRow = React.createClass({
         this.setState({editMode: !this.state.editMode});
     },
 
+    initializeMetricHints: function() {
+        var metricID = "#update_service_metric_"+this.props.service.ID;
+        if (this.state.editMode) {
+            $(metricID).autocomplete({
+                lookup: METRIC_HINTS,
+                onSelect: function(suggestion) {
+                    $(metricID).val(suggestion.data);
+                }
+            });
+        }
+    },
+
     initializeSwitchery: function() {
         var switcheryID = "#update_service_enabled_" + this.props.service.ID
         if (this.state.editMode) {
@@ -142,6 +154,7 @@ var ServiceRow = React.createClass({
 
     componentDidUpdate: function() {
         this.initializeSwitchery();
+        this.initializeMetricHints();
     },
 
     componentWillUpdate: function() {
@@ -151,6 +164,7 @@ var ServiceRow = React.createClass({
 
     componentDidMount: function() {
         this.initializeSwitchery();
+        this.initializeMetricHints();
     },
 
     render: function() {

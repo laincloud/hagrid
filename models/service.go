@@ -40,8 +40,8 @@ func DeleteService(serviceID int) error {
 	return db.Delete(Service{}, serviceID).Error
 }
 
-func IsServiceDuplicated(name string, alertID int) bool {
+func IsServiceDuplicated(name string, alertID, serviceID int) bool {
 	var count int
-	err := db.Model(&Service{}).Where("name = ? and alert_id = ?", name, alertID).Count(&count).Error
+	err := db.Model(&Service{}).Where("name = ? and alert_id = ? and id <> ?", name, alertID, serviceID).Count(&count).Error
 	return count != 0 || err != nil
 }
