@@ -5,4 +5,5 @@
 * [Hagrid 安装](c2/s0.md)
    * [准备：LAIN 集群](c2/s1.md)
    * [准备：MySQL](c2/s2.md)
+   * 准备：icinga2 镜像
 
