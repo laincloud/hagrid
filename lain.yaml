@@ -12,6 +12,7 @@ build:
         - ln -s /lain/app $GOPATH/src/github.com/laincloud/hagrid
         - go build -o hagrid $GOPATH/src/github.com/laincloud/hagrid/main.go
         - webpack
+        - rm -rf node_modules
 
 web:
     cmd: ./hagrid
@@ -21,7 +22,7 @@ web:
         - hagrid.conf.json
 
 web.icinga:
-    image: registry.lain.local/icinga2:20160830
+    image: registry.lain.local/centos-lain-icinga2:20160907
     memory: 256M
     cmd: ./run_icinga.sh
     port: 80
