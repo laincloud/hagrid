@@ -74,9 +74,10 @@ var AlertForm = React.createClass({
                 <div className="col-md-3 col-sm-3 col-xs-12">
                         <input type="checkbox" ref="isEnabled" id="update_alert_enabled" className="js-switch" data-switchery="true" defaultChecked={isChecked}/>
                 </div>
+            </div>
+            <div className="form-group">
                 <div className="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                     <button type="submit" className="btn btn-success">Save</button>
-                    //<button type="button" className="btn btn-danger" data-toggle="modal" data-target="#delete_alert_modal_window">Delete</button>
                 </div>
             </div>
         </form>
