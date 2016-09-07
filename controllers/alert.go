@@ -70,11 +70,15 @@ func UpdateAlertHandler(w http.ResponseWriter, r *http.Request) {
 	newAlert.Enabled = enabled
 
 	if err := models.SaveAlert(newAlert); err != nil {
-		writeResponse(w, "Update alert error: "+err.Error(), http.StatusInternalServerError)
+		writeResponse(w, "Save alert error: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if err := models.SynchronizeAlert(id); err != nil {
+		writeResponse(w, "Synchronize alert to icinga error: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
 	w.WriteHeader(http.StatusAccepted)
-	w.Write([]byte("Update alert successfully"))
+	w.Write([]byte("Save alert successfully"))
 }
 
 func GetAlertHandler(w http.ResponseWriter, r *http.Request) {
@@ -133,17 +137,4 @@ func DeleteAlertHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	models.DeleteAlert(id)
 	writeResponse(w, "Delete alert successfully", http.StatusNoContent)
-}
-
-func SynchronizeAlertHandler(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	id, _ := strconv.Atoi(vars["id"])
-	if _, err := authorize(w, r, id); err != nil {
-		return
-	}
-	if err := models.SynchronizeAlert(id); err != nil {
-		writeResponse(w, "Synchronize alert to icinga error: "+err.Error(), http.StatusInternalServerError)
-		return
-	}
-	writeResponse(w, "Synchronize alert successfully", http.StatusAccepted)
 }

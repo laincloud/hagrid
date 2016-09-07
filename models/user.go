@@ -111,7 +111,7 @@ func AddNotifier(alertID, notifierID int) error {
 
 func IsNotifierDuplicated(alertID, notifierID int) bool {
 	var count int
-	err := db.Exec("SELECT * from `alert_to_user_notify` where alert_id = ? and user_id = ?", alertID, notifierID).Count(&count)
+	err := db.Table("alert_to_user_notify").Where("alert_id = ? and user_id = ?", alertID, notifierID).Count(&count)
 	return count != 0 || err != nil
 }
 
@@ -141,7 +141,7 @@ func AddAdmin(alertID, adminID int) error {
 
 func IsAdminDuplicated(alertID, adminID int) bool {
 	var count int
-	err := db.Exec("SELECT * from `alert_to_user_admin` where alert_id = ? and user_id = ?", alertID, adminID).Count(&count)
+	err := db.Table("alert_to_user_admin").Where("alert_id = ? and user_id = ?", alertID, adminID).Count(&count)
 	return count != 0 || err != nil
 }
 

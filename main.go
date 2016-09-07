@@ -37,7 +37,6 @@ func main() {
 	alertSubrouter.HandleFunc("/{id:[0-9]+}", controllers.UpdateAlertHandler).Methods("PUT")
 	alertSubrouter.HandleFunc("/", controllers.AddAlertHandler).Methods("POST")
 	alertSubrouter.HandleFunc("/{id:[0-9]+}", controllers.DeleteAlertHandler).Methods("DELETE")
-	alertSubrouter.HandleFunc("/{id:[0-9]+}", controllers.SynchronizeAlertHandler).Methods("PATCH")
 
 	// Template APIs ?alert_id=xxx
 	templateSubrouter := r.PathPrefix("/api/templates").Subrouter()
