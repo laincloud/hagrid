@@ -28,6 +28,7 @@ type Icinga2Apply struct {
 	NotificationType string
 	Users            string
 	ServiceName      string
+	Interval         int
 }
 
 type Icinga2Service struct {
@@ -36,6 +37,7 @@ type Icinga2Service struct {
 	Warning       string
 	Critical      string
 	CheckAttempts int
+	ResendTime    int
 	MetricURL     string
 	MetricType    string
 }
@@ -55,6 +57,7 @@ func (s *Icinga2Service) generateApplies(notifiersStr string) []Icinga2Apply {
 			NotificationType: notificationType,
 			Users:            notifiersStr,
 			ServiceName:      s.Name,
+			Interval:         60 * s.ResendTime, //The metric of interval is second here
 		}
 		icinga2Applies = append(icinga2Applies, newNotification)
 	}
@@ -80,6 +83,7 @@ func (al *Alert) generateIcinga2Config() ([]Icinga2Apply, []Icinga2Service) {
 					Warning:       service.Warning,
 					Critical:      service.Critical,
 					CheckAttempts: service.CheckAttempts,
+					ResendTime:    service.ResendTime,
 					MetricURL:     fmt.Sprintf("%s/render?target=%s", config.GetSource(), service.Metric),
 					MetricType:    metricType[service.CheckType],
 				}
@@ -101,6 +105,7 @@ func (al *Alert) generateIcinga2Config() ([]Icinga2Apply, []Icinga2Service) {
 									Warning:       service.Warning,
 									Critical:      service.Critical,
 									CheckAttempts: service.CheckAttempts,
+									ResendTime:    service.ResendTime,
 									MetricURL:     fmt.Sprintf("%s/render?target=%s", config.GetSource(), realMetric),
 									MetricType:    metricType[service.CheckType],
 								}

@@ -14,6 +14,7 @@ var AddServiceForm = React.createClass({
             warning: this.refs.warning.value.trim(),
             critical: this.refs.critical.value.trim(),
             checkAttempts: this.refs.checkAttempts.value.trim(),
+            resendTime: this.refs.resendTime.value.trim(),
             enabled: this.refs.enabled.checked
         };
 
@@ -69,6 +70,9 @@ var AddServiceForm = React.createClass({
                     <input type="text" ref="checkAttempts" id="add_service_check_attempts" placeholder="integer" required="required" className="form-control col-md-7 col-xs-12" />
                 </td>
                 <td className=" ">
+                    <input type="text" ref="resendTime" id="add_service_resend_time" placeholder="integer" required="required" className="form-control col-md-7 col-xs-12" />
+                </td>
+                <td className=" ">
                     <input type="checkbox" ref="enabled" id="add_service_enabled" className="js-switch" data-switchery="true" />
                 </td>
                 <td className=" last">
@@ -110,6 +114,7 @@ var ServiceRow = React.createClass({
             warning: this.refs.warning.value.trim(),
             critical: this.refs.critical.value.trim(),
             checkAttempts: this.refs.checkAttempts.value.trim(),
+            resendTime: this.refs.resendTime.value.trim(),
             enabled: this.refs.enabled.checked
         };
 
@@ -173,11 +178,15 @@ var ServiceRow = React.createClass({
         if (this.props.rowID % 2 == 0) {
             rowClass = "even";
         }
-        var enabledClass = "glyphicon glyphicon-remove"
-        var defaultChecked = ""
+        var enabledClass = "glyphicon glyphicon-remove";
+        var defaultChecked = "";
         if (this.props.service.Enabled) {
-            enabledClass = "glyphicon glyphicon-ok"
-            defaultChecked = "defaultChecked"
+            enabledClass = "glyphicon glyphicon-ok";
+            defaultChecked = "defaultChecked";
+        }
+        var resendTimeText = this.props.service.ResendTime + " min(s)";
+        if (this.props.service.ResendTime == 0) {
+            resendTimeText = "Never";
         }
         if (!this.state.editMode) {
             return (
@@ -188,6 +197,7 @@ var ServiceRow = React.createClass({
                     <td className=" "><span className="label label-warning">{this.props.service.Warning}</span></td>
                     <td className=" "><span className="label label-danger">{this.props.service.Critical}</span></td>
                     <td className=" "><span className="label label-default">{this.props.service.CheckAttempts}</span></td>
+                    <td className=" "><span className="label label-default">{resendTimeText}</span></td>
                     <td className="a-right a-right "><span className={enabledClass} aria-hidden="true"></span></td>
                     <td className=" last">
                         <button type="button" className="btn btn-success btn-xs" aria-label="Left Align" onClick={this.changeMode}>
@@ -230,6 +240,9 @@ var ServiceRow = React.createClass({
                     </td>
                     <td className=" ">
                         <input type="text" ref="checkAttempts" placeholder="integer" required="required" className="form-control col-md-7 col-xs-12" defaultValue={this.props.service.CheckAttempts}/>
+                    </td>
+                    <td className=" ">
+                        <input type="text" ref="resendTime" placeholder="minutes" required="required" className="form-control col-md-7 col-xs-12" defaultValue={this.props.service.ResendTime}/>
                     </td>
                     <td className=" ">
                         <input type="checkbox"
@@ -291,6 +304,7 @@ var ServicesTable = React.createClass({
                         <th className="col-sm-1">Warning </th>
                         <th className="col-sm-1">Critical </th>
                         <th className="col-sm-1">CheckAttempts </th>
+                        <th className="col-sm-1">ResendTime </th>
                         <th className="col-sm-1">Enabled </th>
                         <th className="col-sm-2 no-link last"><span className="nobr">Action</span></th>
                     </tr>

@@ -73,6 +73,15 @@ func AddServiceHandler(w http.ResponseWriter, r *http.Request) {
 		writeResponse(w, "CheckAttempts must not be less than 1", http.StatusBadRequest)
 	}
 
+	resendTime, err := strconv.Atoi(r.FormValue("resendTime"))
+	if err != nil {
+		writeResponse(w, "Resend time must be an integer", 422)
+		return
+	}
+	if resendTime < 0 {
+		writeResponse(w, "Resend time must not be negative", http.StatusBadRequest)
+	}
+
 	service := &models.Service{
 		Name:          r.FormValue("name"),
 		Enabled:       enabled,
@@ -82,6 +91,7 @@ func AddServiceHandler(w http.ResponseWriter, r *http.Request) {
 		CheckAttempts: checkAttempts,
 		AlertID:       alertID,
 		CheckType:     checkType,
+		ResendTime:    resendTime,
 	}
 
 	if err := models.SaveService(service); err != nil {
@@ -201,6 +211,15 @@ func UpdateServiceHandler(w http.ResponseWriter, r *http.Request) {
 		writeResponse(w, "CheckAttempts must not be less than 1", http.StatusBadRequest)
 	}
 
+	resendTime, err := strconv.Atoi(r.FormValue("resendTime"))
+	if err != nil {
+		writeResponse(w, "Resend time must be an integer", 422)
+		return
+	}
+	if resendTime < 0 {
+		writeResponse(w, "Resend time not be negative", http.StatusBadRequest)
+	}
+
 	service.Name = r.FormValue("name")
 	service.Enabled = enabled
 	service.Metric = r.FormValue("metric")
@@ -208,6 +227,7 @@ func UpdateServiceHandler(w http.ResponseWriter, r *http.Request) {
 	service.Critical = r.FormValue("critical")
 	service.CheckAttempts = checkAttempts
 	service.CheckType = checkType
+	service.ResendTime = resendTime
 
 	if err = models.SaveService(&service); err != nil {
 		writeResponse(w, err.Error(), http.StatusInternalServerError)

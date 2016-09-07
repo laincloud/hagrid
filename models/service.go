@@ -18,6 +18,7 @@ type Service struct {
 	Warning       string `gorm:"type:varchar(32);not null"`
 	Critical      string `gorm:"type:varchar(32);not null"`
 	Enabled       bool   `gorm:"not null"`
+	ResendTime    int    `gorm:"not null"`
 	CheckType     string `gorm:"type:varchar(16);not null"`
 	CreatedAt     time.Time
 

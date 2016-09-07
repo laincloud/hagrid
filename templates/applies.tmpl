@@ -3,6 +3,7 @@ apply Notification "{{$apply.Name}}" to Service {
   import "{{$apply.NotificationType}}-service-notification"
   user_groups = []
   users = {{$apply.Users}}
+  interval = {{$apply.Interval}}
   assign where service.name == "{{$apply.ServiceName}}"
 }
 
