@@ -186,12 +186,10 @@ func SynchronizeAlert(id int) error {
 	syncLock.Lock()
 	defer syncLock.Unlock()
 	var (
-		appliesFile       string
-		servicesFile      string
-		commandsFile      string
-		notificationsFile string
-		err               error
-		newStage          string
+		appliesFile  string
+		servicesFile string
+		err          error
+		newStage     string
 	)
 	alert := &Alert{}
 	if err = GetDetailedAlert(alert, id); err != nil {
@@ -215,15 +213,10 @@ func SynchronizeAlert(id int) error {
 		log.Errorf("Rendering template services.tmpl failed: %s", err.Error())
 		return fmt.Errorf("Rendering template failed. Ask admin for help")
 	}
-	placeHolder := ""
-	commandsFile, _ = renderTemplate("commands.tmpl", placeHolder)
-	notificationsFile, _ = renderTemplate("notifications.tmpl", placeHolder)
 
 	files := make(map[string]string)
 	files["conf.d/applies.conf"] = appliesFile
 	files["conf.d/services.conf"] = servicesFile
-	files["conf.d/commands.conf"] = commandsFile
-	files["conf.d/notifications.conf"] = notificationsFile
 	if newStage, err = icinga2Client.UploadFiles(pkgName, files); err != nil {
 		log.Errorf("Uploading alert config files failed: %s", err.Error())
 		return fmt.Errorf("Uploading alert config files failed. Ask admin for help")
