@@ -6361,4 +6361,5 @@ ul.notifications {
 
 #templates_table tbody tr td .label {
     margin-left: 5px;
+    display: inline-block;
 }

@@ -206,9 +206,9 @@ var TemplatesTable = React.createClass({
             <table id="templates_table" className="table table-striped responsive-utilities jambo_table">
                 <thead>
                     <tr className="headings">
-                        <th>Name </th>
-                        <th>Values </th>
-                        <th className=" no-link last"><span className="nobr">Action</span></th>
+                        <th className="col-sm-2">Name </th>
+                        <th className="col-sm-8">Values </th>
+                        <th className="col-sm-2 no-link last"><span className="nobr">Action</span></th>
                     </tr>
                 </thead>
 
