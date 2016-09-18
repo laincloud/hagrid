@@ -22,7 +22,7 @@ web:
         - hagrid.conf.json
 
 web.icinga:
-    image: registry.lain.local/centos-lain-icinga2:20160918
+    image: registry.lain.local/centos-lain-icinga2:20160919
     memory: 256M
     cmd: ./run_icinga.sh
     port: 80

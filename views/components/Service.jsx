@@ -70,7 +70,7 @@ var AddServiceForm = React.createClass({
                     <input type="text" ref="checkAttempts" id="add_service_check_attempts" placeholder="integer" required="required" className="form-control col-md-7 col-xs-12" />
                 </td>
                 <td className=" ">
-                    <input type="text" ref="resendTime" id="add_service_resend_time" placeholder="integer" required="required" className="form-control col-md-7 col-xs-12" />
+                    <input type="text" ref="resendTime" id="add_service_resend_time" placeholder="minutes" required="required" className="form-control col-md-7 col-xs-12" />
                 </td>
                 <td className=" ">
                     <input type="checkbox" ref="enabled" id="add_service_enabled" className="js-switch" data-switchery="true" />
