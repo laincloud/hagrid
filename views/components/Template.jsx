@@ -18,6 +18,9 @@ var AddTemplateForm = React.createClass({
             data: formData,
             success: function(data) {
                 popUpMessagePanel(data, true);
+                $("#add_template_name").val("");
+                $("#add_template_values").val("");
+                $("#add_template_values_tagsinput span").remove();
                 this.props.afterAdd();
             }.bind(this),
             error: function(xhr, status, err) {

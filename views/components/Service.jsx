@@ -25,6 +25,13 @@ var AddServiceForm = React.createClass({
             data: formData,
             success: function(data) {
                 popUpMessagePanel(data, true);
+                $("#add_service_name").val("");
+                $("#add_service_metric").val("");
+                $("#add_service_check_type").val(">");
+                $("#add_service_warning").val("");
+                $("#add_service_critical").val("");
+                $("#add_service_check_attempts").val("");
+                $("#add_service_resend_time").val("");
                 this.props.afterAdd();
             }.bind(this),
             error: function(xhr, status, err) {

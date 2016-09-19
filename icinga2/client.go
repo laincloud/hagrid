@@ -115,7 +115,7 @@ func (ic *Icinga2Client) requestWithBasicAuth(method, reqUrl string, form string
 	req, _ := http.NewRequest(method, ic.Address+reqUrl, strings.NewReader(form))
 	req.SetBasicAuth(ic.User, ic.Password)
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("Accept-Charset", "utf-8")
+	req.Header.Set("Content-Type", "application/json; charset=utf-8")
 	var data []byte
 	resp, err := ic.Client.Do(req)
 	if err != nil {
