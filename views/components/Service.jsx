@@ -305,15 +305,15 @@ var ServicesTable = React.createClass({
             <table id="services_table" className="table table-striped responsive-utilities jambo_table">
                 <thead>
                     <tr className="headings">
-                        <th className="col-sm-2">Name </th>
-                        <th>Metric </th>
-                        <th className="col-sm-1">CheckType </th>
-                        <th className="col-sm-1">Warning </th>
-                        <th className="col-sm-1">Critical </th>
-                        <th className="col-sm-1">CheckAttempts </th>
-                        <th className="col-sm-1">ResendTime </th>
-                        <th className="col-sm-1">Enabled </th>
-                        <th className="col-sm-2 no-link last"><span className="nobr">Action</span></th>
+                        <th>Name </th>
+                        <th className="col-lg-2">Metric </th>
+                        <th>Check Type </th>
+                        <th>Warning </th>
+                        <th>Critical </th>
+                        <th>Check Attempts </th>
+                        <th>Resend Time </th>
+                        <th>Enabled </th>
+                        <th className="no-link last"><span className="nobr">Action</span></th>
                     </tr>
                 </thead>
 

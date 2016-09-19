@@ -1371,11 +1371,20 @@ a.DTTT_button {
 
 table.jambo_table {
     border: 1px solid rgba(221, 221, 221, 0.78);
+    table-layout: fixed;
 }
 
 table.jambo_table thead {
     background: rgba(52, 73, 94, 0.94);
     color: #ECF0F1;
+}
+
+table.jambo_table th {
+    word-wrap: break-word;
+}
+
+table.jambo_table td {
+    word-wrap: break-word;
 }
 
 table.jambo_table tbody tr:hover td {

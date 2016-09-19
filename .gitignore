@@ -1,5 +1,7 @@
 node_modules/*
 static/js/hagrid.js
 static/js/hagrid.js.map
+.idea
 hagrid
 hagrid.conf.json
+hagrid.iml

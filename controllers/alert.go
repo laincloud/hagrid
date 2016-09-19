@@ -10,8 +10,6 @@ import (
 	"github.com/laincloud/hagrid/models"
 )
 
-// Need Authorization
-
 func AddAlertHandler(w http.ResponseWriter, r *http.Request) {
 	enabled, _ := strconv.ParseBool(r.FormValue("enabled"))
 	if r.FormValue("name") == "" {
