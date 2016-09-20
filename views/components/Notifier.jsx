@@ -152,10 +152,10 @@ var NotifiersTable = React.createClass({
                             <th>Name </th>
                             <th>Phone Number </th>
                             <th>Email Address </th>
-                            <th>BearychatTeam </th>
-                            <th>BearychatChannel </th>
-                            <th>SlackTeam </th>
-                            <th>SlackChannel </th>
+                            <th>Bearychat Team </th>
+                            <th>Bearychat Channel </th>
+                            <th>Slack Team </th>
+                            <th>Slack Channel </th>
                             <th className=" no-link last"><span className="nobr">Delete</span></th>
                         </tr>
                     </thead>
