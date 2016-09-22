@@ -3,3 +3,7 @@ static/js/hagrid.js
 static/js/hagrid.js.map
 hagrid
 hagrid.conf.json
+hagrid.iml
+.idea
+node_modules/
+static/
