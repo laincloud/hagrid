@@ -5,3 +5,4 @@ static/js/hagrid.js.map
 hagrid
 hagrid.conf.json
 hagrid.iml
+node_modules/
