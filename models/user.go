@@ -158,6 +158,7 @@ func renderUsers() error {
 	if err != nil {
 		return err
 	}
+	icinga2Client.CreatePackage(userPackage)
 	if newStage, err = icinga2Client.UploadFiles(userPackage,
 		map[string]string{
 			"conf.d/user.conf": data,
