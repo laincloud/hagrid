@@ -94,7 +94,7 @@ func (al *Alert) generateIcinga2Config() ([]Icinga2Apply, []Icinga2Service) {
 				// This service is using template
 				for _, tmpl := range al.Templates {
 					replacedStr := "$" + strings.TrimSpace(tmpl.Name)
-					if strings.Contains(service.Metric, replacedStr) {
+					if strings.Contains(service.Metric, replacedStr + ".") || strings.HasSuffix(service.Metric, replacedStr) {
 						for _, value := range strings.Split(tmpl.Values, ",") {
 							trimedValue := strings.TrimSpace(value)
 							if trimedValue != "" {
