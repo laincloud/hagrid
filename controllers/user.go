@@ -178,6 +178,7 @@ func UpdateUserHandler(w http.ResponseWriter, r *http.Request) {
 	user.SlackChannel = r.FormValue("slack_channel")
 	user.SlackTeam = r.FormValue("slack_team")
 	user.SlackToken = r.FormValue("slack_token")
+	user.PushbulletToken = r.FormValue("pushbullet_token")
 	user.PhoneNumber = r.FormValue("phone_number")
 	if err = models.UpdateUser(user); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
