@@ -2,13 +2,11 @@ package models
 
 import (
 	"bytes"
-	"crypto/tls"
+	"errors"
 	"fmt"
-	"net/http"
 	"path/filepath"
 	"sync"
 	"text/template"
-	"time"
 
 	"github.com/jinzhu/gorm"
 	"github.com/laincloud/hagrid/config"
@@ -21,11 +19,13 @@ const (
 )
 
 var (
-	db            *gorm.DB
-	icinga2Client icinga2.Icinga2Client
-	syncLock      *sync.Mutex
+	db                  *gorm.DB
+	icinga2Client       icinga2.Icinga2Client
+	syncLock            *sync.Mutex
+	ErrorDuplicatedName = errors.New("The name is duplicated")
 )
 
+//TODO uncomment these codes
 func init() {
 	var err error
 	if db, err = gorm.Open("mysql",
@@ -43,32 +43,32 @@ func init() {
 
 	if config.GetDatabaseMigrate() {
 		db.Set("gorm:table_options", "ENGINE=InnoDB DEFAULT CHARSET=utf8").AutoMigrate(
-			&User{}, &Alert{}, &Service{}, &Template{},
+			&User{}, &Alert{}, &GraphiteService{}, &Template{},
 		)
-		db.Model(&Service{}).AddForeignKey("alert_id", "alerts(id)", "CASCADE", "RESTRICT")
+		db.Model(&GraphiteService{}).AddForeignKey("alert_id", "alerts(id)", "CASCADE", "RESTRICT")
 		db.Table("alert_to_user_admin").AddForeignKey("alert_id", "alerts(id)", "CASCADE", "RESTRICT")
 		db.Table("alert_to_user_admin").AddForeignKey("user_id", "users(id)", "CASCADE", "RESTRICT")
 		db.Table("alert_to_user_notify").AddForeignKey("alert_id", "alerts(id)", "CASCADE", "RESTRICT")
 		db.Table("alert_to_user_notify").AddForeignKey("user_id", "users(id)", "CASCADE", "RESTRICT")
 		db.Model(&Template{}).AddUniqueIndex("unique_alert_template", "alert_id", "name")
-		db.Model(&Service{}).AddUniqueIndex("unique_alert_service", "alert_id", "name")
+		db.Model(&GraphiteService{}).AddUniqueIndex("unique_alert_service", "alert_id", "name")
 	}
 
-	icinga2Client.Address = config.GetIcinga2APIAddress()
-	icinga2Client.Client = &http.Client{
-		Timeout: time.Second * 3,
-		Transport: &http.Transport{
-			TLSClientConfig: &tls.Config{
-				InsecureSkipVerify: true,
-			},
-		},
-	}
-	icinga2Client.User = config.GetIcinga2APIUser()
-	icinga2Client.Password = config.GetIcinga2APIPassword()
+	//icinga2Client.Address = config.GetIcinga2APIAddress()
+	//icinga2Client.Client = &http.Client{
+	//	Timeout: time.Second * 3,
+	//	Transport: &http.Transport{
+	//		TLSClientConfig: &tls.Config{
+	//			InsecureSkipVerify: true,
+	//		},
+	//	},
+	//}
+	//icinga2Client.User = config.GetIcinga2APIUser()
+	//icinga2Client.Password = config.GetIcinga2APIPassword()
 
 	syncLock = &sync.Mutex{}
 	syncLock.Lock()
-	icinga2Client.CreatePackage(userPackage)
+	//icinga2Client.CreatePackage(userPackage)
 	syncLock.Unlock()
 
 }

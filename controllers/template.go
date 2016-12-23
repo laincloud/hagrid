@@ -1,155 +1,117 @@
 package controllers
 
 import (
-	"encoding/json"
+	"fmt"
 	"net/http"
+	"regexp"
 	"strconv"
 
-	"strings"
-
-	"github.com/gorilla/mux"
+	"github.com/astaxie/beego/validation"
+	"github.com/jinzhu/gorm"
 	"github.com/laincloud/hagrid/models"
 )
 
-func AddTemplateHandler(w http.ResponseWriter, r *http.Request) {
-	alertID, _ := strconv.Atoi(r.FormValue("alertID"))
-
-	if _, err := authorize(w, r, alertID); err != nil {
-		return
-	}
-
-	if r.FormValue("name") == "" {
-		writeResponse(w, "Template name is empty", http.StatusBadRequest)
-		return
-	}
-
-	if models.IsTemplateDuplicated(r.FormValue("name"), alertID, 0) {
-		writeResponse(w, "The template name is duplicated in this alert", http.StatusConflict)
-		return
-	}
-
-	if r.FormValue("values") == "" {
-		writeResponse(w, "You must specify one value at least", http.StatusBadRequest)
-		return
-	}
-
-	if strings.ContainsRune(r.FormValue("values"), '$') {
-		writeResponse(w, "Values can't contain '$'", http.StatusBadRequest)
-		return
-	}
-
-	template := &models.Template{
-		Name:    r.FormValue("name"),
-		Values:  r.FormValue("values"),
-		AlertID: alertID,
-	}
-
-	if err := models.SaveTemplate(template); err != nil {
-		writeResponse(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	writeResponse(w, "Add template successfully", http.StatusCreated)
+type TemplateController struct {
+	AuthController
 }
 
-func GetTemplateHandler(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	id, _ := strconv.Atoi(vars["id"])
-	var (
-		err      error
-		data     []byte
-		template models.Template
-	)
-	if err = models.GetTemplate(id, &template); err != nil {
-		writeResponse(w, err.Error(), http.StatusInternalServerError)
-		return
+var templateNameReg = regexp.MustCompile(`^[^$]+$`)
+
+func (this *TemplateController) NestPrepare() {
+	if this.Ctx.Input.IsPost() || this.Ctx.Input.IsPut() {
+		targetTemplate := &models.Template{}
+		validator := validation.Validation{}
+		if err := this.ParseForm(targetTemplate); err != nil {
+			controllerLogger.Printf("Parsing template form error: %s", err.Error())
+			this.outputError(http.StatusInternalServerError, errorMsg500)
+			this.ServeJSON()
+			this.StopRun()
+		} else {
+			targetTemplate.AlertID, _ = strconv.Atoi(this.Ctx.Input.Param(":alert_id"))
+			targetTemplate.ID, _ = strconv.Atoi(this.Ctx.Input.Param(":template_id"))
+			validator.Required(targetTemplate.Name, "name")
+			validator.Match(targetTemplate.Values, templateNameReg, "values").Message("Shouldn't contain any '$'")
+			if this.Ctx.Input.IsPut() {
+				validator.Required(targetTemplate.ID, "id")
+			}
+			if validator.HasErrors() {
+				for _, err := range validator.Errors {
+					this.outputError(http.StatusBadRequest, fmt.Sprintf("[%s]%s", err.Key, err.Message))
+					this.ServeJSON()
+					this.StopRun()
+				}
+			}
+		}
+		this.Ctx.Input.SetData("targetTemplate", targetTemplate)
 	}
-	if data, err = json.Marshal(template); err != nil {
-		writeResponse(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	w.WriteHeader(http.StatusOK)
-	w.Write(data)
 }
 
-func GetAllTemplatesHandler(w http.ResponseWriter, r *http.Request) {
-	alertID, _ := strconv.Atoi(r.URL.Query().Get("alert_id"))
-	var (
-		templates []models.Template
-		err       error
-		data      []byte
-	)
-
-	if err = models.GetAllTemplatesByAlertID(alertID, &templates); err != nil {
-		writeResponse(w, err.Error(), http.StatusInternalServerError)
-		return
+func (this *TemplateController) Post() {
+	targetTemplate := this.Ctx.Input.GetData("targetTemplate").(*models.Template)
+	if err := models.SaveTemplate(targetTemplate); err == models.ErrorDuplicatedName {
+		this.outputError(http.StatusConflict, errorMsg409)
+	} else if err != nil {
+		controllerLogger.Printf("PostTemplate failed: %s", err.Error())
+		this.outputError(http.StatusInternalServerError, errorMsg500)
+	} else {
+		this.outputSuccess(http.StatusCreated, targetTemplate)
 	}
-	if data, err = json.Marshal(templates); err != nil {
-		writeResponse(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	w.WriteHeader(http.StatusOK)
-	w.Write(data)
+	this.ServeJSON()
 }
 
-func UpdateTemplateHandler(w http.ResponseWriter, r *http.Request) {
-	var (
-		template models.Template
-		err      error
-	)
-	vars := mux.Vars(r)
-	id, _ := strconv.Atoi(vars["id"])
-	if err = models.GetTemplate(id, &template); err != nil {
-		writeResponse(w, err.Error(), http.StatusInternalServerError)
-		return
+func (this *TemplateController) Put() {
+	targetTemplate := this.Ctx.Input.GetData("targetTemplate").(*models.Template)
+	if err := models.SaveTemplate(targetTemplate); err == models.ErrorDuplicatedName {
+		this.outputError(http.StatusConflict, errorMsg409)
+	} else if err == gorm.ErrRecordNotFound {
+		this.outputError(http.StatusNotFound, errorMsg404)
+	} else if err != nil {
+		controllerLogger.Printf("PutTemplate failed: %s", err.Error())
+		this.outputError(http.StatusInternalServerError, errorMsg500)
+	} else {
+		this.outputSuccess(http.StatusCreated, targetTemplate)
 	}
-
-	if _, err = authorize(w, r, template.AlertID); err != nil {
-		return
-	}
-
-	if r.FormValue("name") == "" {
-		writeResponse(w, "Template name is empty", http.StatusBadRequest)
-		return
-	}
-
-	if models.IsTemplateDuplicated(r.FormValue("name"), template.AlertID, template.ID) {
-		writeResponse(w, "The template name is duplicated in this alert", http.StatusConflict)
-		return
-	}
-
-	if r.FormValue("values") == "" {
-		writeResponse(w, "You must specify one value at least", http.StatusBadRequest)
-		return
-	}
-
-	if strings.ContainsRune(r.FormValue("values"), '$') {
-		writeResponse(w, "Values can't contain '$'", http.StatusBadRequest)
-		return
-	}
-
-	template.Name = r.FormValue("name")
-	template.Values = r.FormValue("values")
-
-	if err = models.SaveTemplate(&template); err != nil {
-		writeResponse(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	writeResponse(w, "Update template successfully", http.StatusAccepted)
+	this.ServeJSON()
 }
 
-func DeleteTemplateHandler(w http.ResponseWriter, r *http.Request) {
-	var template models.Template
-	vars := mux.Vars(r)
-	id, _ := strconv.Atoi(vars["id"])
-	if err := models.GetTemplate(id, &template); err != nil {
-		writeResponse(w, err.Error(), http.StatusInternalServerError)
-		return
+func (this *TemplateController) Delete() {
+	targetTemplateID, _ := strconv.Atoi(this.Ctx.Input.Param(":template_id"))
+	alertID, _ := strconv.Atoi(this.Ctx.Input.Param(":alert_id"))
+	if err := models.DeleteTemplate(targetTemplateID, alertID); err == gorm.ErrRecordNotFound {
+		this.outputError(http.StatusNotFound, errorMsg404)
+	} else if err != nil {
+		controllerLogger.Printf("DeleteTemplate failed: %s", err.Error())
+		this.outputError(http.StatusInternalServerError, errorMsg500)
+	} else {
+		this.outputSuccess(http.StatusNoContent, succMsg204)
 	}
+	this.ServeJSON()
+}
 
-	if _, err := authorize(w, r, template.AlertID); err != nil {
-		return
+func (this *TemplateController) Get() {
+	templateIDStr := this.Ctx.Input.Param(":template_id")
+	alertID, _ := strconv.Atoi(this.Ctx.Input.Param(":alert_id"))
+	if templateIDStr == "all" {
+		var templates []models.Template
+		if err := models.GetAllTemplatesByAlertID(alertID, &templates); err == gorm.ErrRecordNotFound {
+			this.outputError(http.StatusNotFound, errorMsg404)
+		} else if err != nil {
+			controllerLogger.Printf("GetAllTemplates failed: %s", err.Error())
+			this.outputError(http.StatusInternalServerError, errorMsg500)
+		} else {
+			this.outputSuccess(http.StatusOK, &templates)
+		}
+	} else {
+		var template models.Template
+		templateID, _ := strconv.Atoi(templateIDStr)
+		if err := models.GetTemplate(templateID, &template); err == gorm.ErrRecordNotFound || alertID != template.AlertID {
+			this.outputError(http.StatusNotFound, errorMsg404)
+		} else if err != nil {
+			controllerLogger.Printf("GetTemplate failed: %s", err.Error())
+			this.outputError(http.StatusInternalServerError, errorMsg500)
+		} else {
+			this.outputSuccess(http.StatusOK, &template)
+		}
 	}
-
-	models.DeleteTemplate(id)
-	writeResponse(w, "Delete template successfully", http.StatusNoContent)
+	this.ServeJSON()
 }
