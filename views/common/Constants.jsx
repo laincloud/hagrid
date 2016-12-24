@@ -1,0 +1,16 @@
+const ADMIN_PAGE = 0;
+const ALERT_PAGE = 1;
+const TCP_PAGE = 2;
+const GRAPHITE_PAGE = 3;
+const NOTIFIER_PAGE = 4;
+
+const STYLE_DANGER = "danger";
+const STYLE_DEFAULT = "default";
+const STYLE_INFO = "info";
+const STYLE_PRIMARY = "primary";
+const STYLE_SUCCESS = "success";
+const STYLE_WARN = "warning";
+
+export {ADMIN_PAGE, ALERT_PAGE, TCP_PAGE, GRAPHITE_PAGE, NOTIFIER_PAGE,
+STYLE_DANGER, STYLE_DEFAULT, STYLE_INFO, STYLE_PRIMARY, STYLE_SUCCESS, STYLE_WARN,
+};
