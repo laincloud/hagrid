@@ -43,15 +43,18 @@ func init() {
 
 	if config.GetDatabaseMigrate() {
 		db.Set("gorm:table_options", "ENGINE=InnoDB DEFAULT CHARSET=utf8").AutoMigrate(
-			&User{}, &Alert{}, &GraphiteService{}, &Template{},
+			&User{}, &Alert{}, &GraphiteService{}, &Template{}, &TCPService{},
 		)
 		db.Model(&GraphiteService{}).AddForeignKey("alert_id", "alerts(id)", "CASCADE", "RESTRICT")
+		db.Model(&Template{}).AddForeignKey("alert_id", "alerts(id)", "CASCADE", "RESTRICT")
+		db.Model(&TCPService{}).AddForeignKey("alert_id", "alerts(id)", "CASCADE", "RESTRICT")
 		db.Table("alert_to_user_admin").AddForeignKey("alert_id", "alerts(id)", "CASCADE", "RESTRICT")
 		db.Table("alert_to_user_admin").AddForeignKey("user_id", "users(id)", "CASCADE", "RESTRICT")
 		db.Table("alert_to_user_notify").AddForeignKey("alert_id", "alerts(id)", "CASCADE", "RESTRICT")
 		db.Table("alert_to_user_notify").AddForeignKey("user_id", "users(id)", "CASCADE", "RESTRICT")
 		db.Model(&Template{}).AddUniqueIndex("unique_alert_template", "alert_id", "name")
-		db.Model(&GraphiteService{}).AddUniqueIndex("unique_alert_service", "alert_id", "name")
+		db.Model(&GraphiteService{}).AddUniqueIndex("unique_alert_graphiteservice", "alert_id", "name")
+		db.Model(&TCPService{}).AddUniqueIndex("unique_alert_tcpservice", "alert_id", "name")
 	}
 
 	//icinga2Client.Address = config.GetIcinga2APIAddress()

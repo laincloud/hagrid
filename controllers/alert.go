@@ -22,6 +22,7 @@ func (this *AlertController) NestPrepare() {
 			Admins:           make([]models.User, 0),
 			Notifiers:        make([]models.User, 0),
 			Templates:        make([]models.Template, 0),
+			TCPServices:      make([]models.TCPService, 0),
 		}
 		validator := validation.Validation{}
 		if err := this.ParseForm(targetAlert); err != nil {
@@ -112,6 +113,7 @@ func (this *AlertController) Get() {
 			Admins:           make([]models.User, 0),
 			Notifiers:        make([]models.User, 0),
 			Templates:        make([]models.Template, 0),
+			TCPServices:      make([]models.TCPService, 0),
 		}
 		if err := models.GetDetailedAlert(alert, id); err == gorm.ErrRecordNotFound {
 			this.outputError(http.StatusNotFound, errorMsg404)

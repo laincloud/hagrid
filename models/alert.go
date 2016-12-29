@@ -15,6 +15,7 @@ type Alert struct {
 	Name             string            `gorm:"type:varchar(64);not null;unique" form:"name"`
 	Enabled          bool              `gorm:"not null" form:"enabled"`
 	GraphiteServices []GraphiteService `gorm:"ForeignKey:AlertID" form:"-"`
+	TCPServices      []TCPService      `gorm:"ForeignKey:AlertID" form:"-"`
 	Templates        []Template        `gorm:"ForeignKey:AlertID" form:"-"`
 	Notifiers        []User            `gorm:"many2many:alert_to_user_notify" form:"-"`
 	Admins           []User            `gorm:"many2many:alert_to_user_admin" form:"-"`
@@ -150,6 +151,9 @@ func GetDetailedAlert(alert *Alert, id int) error {
 		return err
 	}
 	if err := db.Model(alert).Association("GraphiteServices").Find(&(alert.GraphiteServices)).Error; err != nil {
+		return err
+	}
+	if err := db.Model(alert).Association("TCPServices").Find(&(alert.TCPServices)).Error; err != nil {
 		return err
 	}
 	if err := db.Model(alert).Association("Templates").Find(&(alert.Templates)).Error; err != nil {
