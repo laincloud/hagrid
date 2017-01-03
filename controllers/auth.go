@@ -68,21 +68,19 @@ func (this *AuthController) Prepare() {
 
 }
 
-//TODO uncomment these codes
 func (this *AuthController) getAuthUserInfo() (string, error) {
-	//session, err := hagridSessions.Get(this.Ctx.Request, "session-name")
-	//if err != nil {
-	//	return "", err
-	//}
-	//var userName string
-	//var ok bool
-	//userNameObj, exists := session.Values["user_name"]
-	//if !exists {
-	//	return "", ErrorUsernameEmpty
-	//}
-	//if userName, ok = userNameObj.(string); !ok {
-	//	return "", ErrorUserNull
-	//}
-	//return userName, nil
-	return "baijian", nil
+	session, err := hagridSessions.Get(this.Ctx.Request, "session-name")
+	if err != nil {
+		return "", err
+	}
+	var userName string
+	var ok bool
+	userNameObj, exists := session.Values["user_name"]
+	if !exists {
+		return "", ErrorUsernameEmpty
+	}
+	if userName, ok = userNameObj.(string); !ok {
+		return "", ErrorUserNull
+	}
+	return userName, nil
 }

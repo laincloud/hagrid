@@ -66,7 +66,6 @@ func (this *AlertController) Post() {
 	this.ServeJSON()
 }
 
-//TODO uncomment these codes
 func (this *AlertController) Put() {
 	targetAlert := this.Ctx.Input.GetData("targetAlert").(*models.Alert)
 	if err := models.SaveAlert(targetAlert); err == models.ErrorDuplicatedName {
@@ -77,12 +76,12 @@ func (this *AlertController) Put() {
 		controllerLogger.Printf("PutAlert failed: %s", err.Error())
 		this.outputError(http.StatusInternalServerError, errorMsg500)
 	} else {
-		//if err := models.SynchronizeAlert(targetAlert.ID); err != nil {
-		//	controllerLogger.Printf("SyncAlert failed: %s", err.Error())
-		//	this.outputError(http.StatusInternalServerError, errorMsg500)
-		//} else {
-		//	this.outputSuccess(http.StatusCreated, targetAlert)
-		//}
+		if err := models.SynchronizeAlert(targetAlert.ID); err != nil {
+			controllerLogger.Printf("SyncAlert failed: %s", err.Error())
+			this.outputError(http.StatusInternalServerError, errorMsg500)
+		} else {
+			this.outputSuccess(http.StatusCreated, targetAlert)
+		}
 		this.outputSuccess(http.StatusCreated, targetAlert)
 	}
 	this.ServeJSON()

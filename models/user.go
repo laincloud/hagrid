@@ -34,15 +34,13 @@ func AddUserIfNotExists(name string) error {
 	return db.FirstOrCreate(maybeNewUser, maybeNewUser).Error
 }
 
-//TODO uncomment these codes
 func UpdateUser(user *User) error {
 	syncLock.Lock()
 	defer syncLock.Unlock()
 	if err := db.Save(user).Error; err != nil {
 		return err
 	}
-	//return renderUsers()
-	return nil
+	return renderUsers()
 }
 
 func GetUser(userName string, user *User) error {

@@ -4,9 +4,13 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"net/http"
 	"path/filepath"
 	"sync"
 	"text/template"
+	"time"
+
+	"crypto/tls"
 
 	"github.com/jinzhu/gorm"
 	"github.com/laincloud/hagrid/config"
@@ -25,7 +29,19 @@ var (
 	ErrorDuplicatedName = errors.New("The name is duplicated")
 )
 
-//TODO uncomment these codes
+type Icinga2Service interface {
+	GetServiceID() string
+	GetServiceName() string
+	GetServiceCheckCommand() string
+	GetServiceCheckAttempts() int
+	GetServiceResendTime() int
+	GetServiceVars() map[string]interface{}
+}
+
+type Icinga2TemplatedService interface {
+	GenerateServices(templates []Template) []Icinga2Service
+}
+
 func init() {
 	var err error
 	if db, err = gorm.Open("mysql",
@@ -57,21 +73,21 @@ func init() {
 		db.Model(&TCPService{}).AddUniqueIndex("unique_alert_tcpservice", "alert_id", "name")
 	}
 
-	//icinga2Client.Address = config.GetIcinga2APIAddress()
-	//icinga2Client.Client = &http.Client{
-	//	Timeout: time.Second * 3,
-	//	Transport: &http.Transport{
-	//		TLSClientConfig: &tls.Config{
-	//			InsecureSkipVerify: true,
-	//		},
-	//	},
-	//}
-	//icinga2Client.User = config.GetIcinga2APIUser()
-	//icinga2Client.Password = config.GetIcinga2APIPassword()
+	icinga2Client.Address = config.GetIcinga2APIAddress()
+	icinga2Client.Client = &http.Client{
+		Timeout: time.Second * 3,
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{
+				InsecureSkipVerify: true,
+			},
+		},
+	}
+	icinga2Client.User = config.GetIcinga2APIUser()
+	icinga2Client.Password = config.GetIcinga2APIPassword()
 
 	syncLock = &sync.Mutex{}
 	syncLock.Lock()
-	//icinga2Client.CreatePackage(userPackage)
+	icinga2Client.CreatePackage(userPackage)
 	syncLock.Unlock()
 
 }

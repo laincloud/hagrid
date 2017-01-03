@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/laincloud/hagrid/config"
@@ -31,17 +30,6 @@ type Icinga2Apply struct {
 	Interval         int
 }
 
-type Icinga2Service struct {
-	ID            string
-	Name          string
-	Warning       string
-	Critical      string
-	CheckAttempts int
-	ResendTime    int
-	MetricURL     string
-	MetricType    string
-}
-
 var metricType = map[string]string{
 	Greater:  "greater",
 	Less:     "less",
@@ -49,15 +37,15 @@ var metricType = map[string]string{
 	Equal:    "equal",
 }
 
-func (s *Icinga2Service) generateApplies(notifiersStr string) []Icinga2Apply {
+func generateApplies(notifiersStr string, service Icinga2Service) []Icinga2Apply {
 	var icinga2Applies []Icinga2Apply
 	for _, notificationType := range config.GetIcinga2NotificationTypes() {
 		newNotification := Icinga2Apply{
-			Name:             fmt.Sprintf("%s[%s]", s.Name, notificationType),
+			Name:             fmt.Sprintf("%s[%s]", service.GetServiceName(), notificationType),
 			NotificationType: notificationType,
 			Users:            notifiersStr,
-			ServiceName:      s.Name,
-			Interval:         60 * s.ResendTime, //The metric of interval is second here
+			ServiceName:      service.GetServiceName(),
+			Interval:         60 * service.GetServiceResendTime(), //The metric of interval is second here
 		}
 		icinga2Applies = append(icinga2Applies, newNotification)
 	}
@@ -73,51 +61,20 @@ func (al *Alert) generateIcinga2Config() ([]Icinga2Apply, []Icinga2Service) {
 	notifiersStr := string(notifiersBytes)
 	var icinga2Applies []Icinga2Apply
 	var icinga2Services []Icinga2Service
-	for _, service := range al.GraphiteServices {
-		if service.Enabled {
-			if !strings.ContainsRune(service.Metric, '$') {
-				// This service is not using template
-				newService := Icinga2Service{
-					ID:            strconv.Itoa(service.ID),
-					Name:          fmt.Sprintf("%s-%s", al.Name, service.Name),
-					Warning:       service.Warning,
-					Critical:      service.Critical,
-					CheckAttempts: service.CheckAttempts,
-					ResendTime:    service.ResendTime,
-					MetricURL:     fmt.Sprintf("%s/render?target=%s", config.GetSource(), service.Metric),
-					MetricType:    metricType[service.CheckType],
-				}
-				icinga2Services = append(icinga2Services, newService)
-				icinga2Applies = append(icinga2Applies, newService.generateApplies(notifiersStr)...)
-
-			} else {
-				// This service is using template
-				for _, tmpl := range al.Templates {
-					replacedStr := "$" + strings.TrimSpace(tmpl.Name)
-					if strings.Contains(service.Metric, replacedStr+".") || strings.HasSuffix(service.Metric, replacedStr) {
-						for _, value := range strings.Split(tmpl.Values, ",") {
-							trimedValue := strings.TrimSpace(value)
-							if trimedValue != "" {
-								realMetric := strings.Replace(service.Metric, replacedStr, trimedValue, -1)
-								newService := Icinga2Service{
-									ID:            fmt.Sprintf("%d-%d-%s", service.ID, tmpl.ID, trimedValue),
-									Name:          fmt.Sprintf("%s-%s[%s]", al.Name, service.Name, trimedValue),
-									Warning:       service.Warning,
-									Critical:      service.Critical,
-									CheckAttempts: service.CheckAttempts,
-									ResendTime:    service.ResendTime,
-									MetricURL:     fmt.Sprintf("%s/render?target=%s", config.GetSource(), realMetric),
-									MetricType:    metricType[service.CheckType],
-								}
-								icinga2Services = append(icinga2Services, newService)
-								icinga2Applies = append(icinga2Applies, newService.generateApplies(notifiersStr)...)
-							}
-						}
-					}
-				}
-			}
-		}
+	for _, gs := range al.GraphiteServices {
+		generatedService := gs.GenerateServices(al.Templates)
+		icinga2Services = append(icinga2Services, generatedService...)
 	}
+
+	for _, tcps := range al.TCPServices {
+		generatedService := tcps.GenerateServices(al.Templates)
+		icinga2Services = append(icinga2Services, generatedService...)
+	}
+
+	for _, icgs := range icinga2Services {
+		icinga2Applies = append(icinga2Applies, generateApplies(notifiersStr, icgs)...)
+	}
+
 	return icinga2Applies, icinga2Services
 }
 

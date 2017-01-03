@@ -1,13 +1,12 @@
 {{ range $service := .Services }}
-apply Service "{{$service.Name}}" {
+apply Service "{{ call $service.GetServiceName }}" {
   import "generic-service"
-  check_command = "check_graphite_metric"
-  max_check_attempts = {{$service.CheckAttempts}}
-  vars.metric_warning = {{$service.Warning}}
-  vars.metric_critical = {{$service.Critical}}
-  vars.metric_url = "{{$service.MetricURL}}"
-  vars.metric_type = "{{$service.MetricType}}"
-  vars.service_id = "{{$service.ID}}"
+  check_command = "{{ call $service.GetServiceCheckCommand }}"
+  max_check_attempts = {{ call $service.GetServiceCheckAttempts }}
+  vars.service_id = "{{ call $service.GetServiceID }}"
+  {{ range $metric_key, $metric_value := call $service.GetServiceVars }}
+  vars.{{ $metric_key }} = "{{ $metric_value }}"
+  {{ end }}
   assign where host.name == NodeName
 }
 
