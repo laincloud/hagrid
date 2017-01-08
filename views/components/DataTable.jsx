@@ -12,7 +12,7 @@ export default class DataTable extends Component {
   render() {
     return (
       <div className="table-responsive">
-        <table id={this.props.tableID} className="table table-left nowrap no-footer">
+        <table id={this.props.tableID} className="table table-left no-footer">
           <thead>
             <tr>
               {
