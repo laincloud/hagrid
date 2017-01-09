@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import SimpleButton from "../../components/SimpleButton";
 import { STYLE_DEFAULT, STYLE_SUCCESS, STYLE_PRIMARY } from "../../common/Constants";
 import { MODE_DELETE, MODE_UPDATE, MODE_ADD } from "../../common/Constants";
-import { closeGraphiteModal } from "../../actions/GraphiteServiceAction"
+import { closeGraphiteModal, deleteGraphiteService } from "../../actions/GraphiteServiceAction"
 
 class GraphiteServiceModalComponent extends Component {
 
@@ -13,6 +13,7 @@ class GraphiteServiceModalComponent extends Component {
   }
 
   renderConfirmModal() {
+    let serviceID = this.props.serviceData["ID"];
     return (
       <Modal show={this.props.isOpen} onHide={this.props.handleClose}>
         <Modal.Header closeButton>
@@ -23,8 +24,8 @@ class GraphiteServiceModalComponent extends Component {
           <p><font color="red">The operation can't be undo.</font></p>
         </Modal.Body>
         <Modal.Footer>
-          <SimpleButton btStyle={STYLE_PRIMARY} handleClick={this.props.handleClose} text="delete"/>
-          <SimpleButton btStyle={STYLE_DEFAULT} handleClick={this.props.handleDelete} text="close"/>
+          <SimpleButton btStyle={STYLE_PRIMARY} handleClick={() => {this.props.handleDelete(serviceID)}} text="Delete"/>
+          <SimpleButton btStyle={STYLE_DEFAULT} handleClick={this.props.handleClose} text="Close"/>
         </Modal.Footer>
       </Modal>
     )
@@ -36,13 +37,13 @@ class GraphiteServiceModalComponent extends Component {
     const renderDataModal = this.renderDataModal.bind(this);
     if (this.props.mode == MODE_DELETE) {
       return <div> {renderConfirmModal()} </div>
-
     } else {
       return <div> {renderDataModal()} </div>
     }
 
   }
 }
+
 
 function mapStateToProps(state) {
   return {
@@ -55,6 +56,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     handleClose: () => dispatch(closeGraphiteModal()),
+    handleDelete: (id) => dispatch(deleteGraphiteService(id)),
   }
 }
 

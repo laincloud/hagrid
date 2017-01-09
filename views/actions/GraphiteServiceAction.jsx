@@ -15,4 +15,23 @@ function closeGraphiteModal() {
   }
 }
 
-export {openGraphiteModal, closeGraphiteModal};
+function deleteGraphiteService(id) {
+  return function(dispatch) {
+    dispatch(closeGraphiteModal());
+    console.log("Close " + id);
+  };
+}
+
+function getGraphiteService() {
+
+}
+
+function updateGraphiteService() {
+
+}
+
+function addGraphiteService() {
+
+}
+
+export {openGraphiteModal, closeGraphiteModal, deleteGraphiteService};
