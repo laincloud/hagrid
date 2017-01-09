@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux';
-import AlertReducers from "./AlertReducer";
+import sideMenuReducer from "./SideMenuReducer";
+import graphiteServiceReducer from "./GraphiteServiceReducer";
 
 const RootReducer = combineReducers({
-  //alertReducers: AlertReducers,
+  sideMenuReducer,
+  graphiteServiceReducer
 });
 
 export default RootReducer;

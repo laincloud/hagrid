@@ -1,31 +1,21 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import {ADMIN_PAGE, ALERT_PAGE, TCP_PAGE, GRAPHITE_PAGE, NOTIFIER_PAGE} from "../common/Constants";
-import GraphiteServiceListCard from "./GraphiteServiceListCard";
+import GraphiteServiceListCard from "./graphite/GraphiteServiceListCard";
 import TCPServiceListCard from "./TCPServiceListCard";
-import AlertListCard from "./AlertSelectionCard";
+import AlertListCard from "./AlertListCard";
+import { connect } from 'react-redux'
 
-export default class Content extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      alertID: 3,
-      pageMode: GRAPHITE_PAGE,
-    }
-  }
-
-  // set state(newState) {
-  //   this.state = newState
-  // }
+class ContentComponent extends Component {
 
   getPage() {
-    switch(this.state.pageMode){
+    switch(this.props.pageMode){
       case ALERT_PAGE:
-        return <AlertListCard alertID={this.state.alertID}/>;
+        return <AlertListCard alertID={this.props.alertID}/>;
       case GRAPHITE_PAGE:
-        return <GraphiteServiceListCard alertID={this.state.alertID}/>;
+        return <GraphiteServiceListCard alertID={this.props.alertID}/>;
       default:
-        return <AlertListCard alertID={this.state.alertID}/>;
+        return <AlertListCard alertID={this.props.alertID}/>;
     }
   }
 
@@ -44,4 +34,20 @@ export default class Content extends Component {
       </div>
     )
   }
+
 }
+
+function mapStateToProps(state) {
+  return {
+    alertID: state.sideMenuReducer.alertID,
+    pageMode: state.sideMenuReducer.pageMode,
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {}
+}
+
+const Content = connect(mapStateToProps, mapDispatchToProps)(ContentComponent);
+
+export default Content;

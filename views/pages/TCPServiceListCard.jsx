@@ -26,10 +26,9 @@ export default class TCPServiceListCard extends Component {
     return (
       <div className="card">
         <div className="card-header">
-          <h2>Graphite Services</h2>
+          <h2>TCP Services</h2>
         </div>
         <div className="card-body">
-          <DataTable headers={tableHeader} rows={tableRows}/>
         </div>
       </div>
     )

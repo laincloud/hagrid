@@ -1,13 +1,17 @@
 import React, {Component} from "react";
-import DataTable from "../components/DataTable";
-import Label from "../components/Label";
-import { STYLE_INFO, STYLE_PRIMARY, STYLE_DEFAULT, STYLE_DANGER, STYLE_SUCCESS, STYLE_WARN } from "../common/Constants";
+import DataTable from "../../components/DataTable";
+import Label from "../../components/Label";
+import { STYLE_INFO, STYLE_PRIMARY, STYLE_DEFAULT, STYLE_DANGER, STYLE_SUCCESS, STYLE_WARN } from "../../common/Constants";
+import { MODE_ADD, MODE_UPDATE, MODE_DELETE } from "../../common/Constants";
 import $ from "jquery";
 import "datatables.net-bs";
-import DropdownButton, { DropdownButtonList } from "../components/DropdownButton";
-import hToastr from "../components/HagridToastr";
-import WordBreakText from "../components/WordBreakText";
-import GraphiteServiceUpdateModal from "./GraphiteServiceUpdateModal";
+import DropdownButton, { DropdownButtonList } from "../../components/DropdownButton";
+import hToastr from "../../components/HagridToastr";
+import WordBreakText from "../../components/WordBreakText";
+import GraphiteServiceModal from "./GraphiteServiceModal";
+import { Provider } from "react-redux";
+import store from "../../common/Store";
+import { openGraphiteModal } from "../../actions/GraphiteServiceAction";
 
 
 export default class GraphiteServiceListCard extends Component {
@@ -38,7 +42,8 @@ export default class GraphiteServiceListCard extends Component {
         }
       },
       order: [[0, "asc"]],
-      searching: false
+      searching: false,
+      destroy: true,
     });
   }
 
@@ -52,14 +57,14 @@ export default class GraphiteServiceListCard extends Component {
           this.setState({graphiteServices: data})
         }.bind(this),
         error: function(xhr, status, err) {
-          console.log(xhr)
+          hToastr.error(JSON.parse(xhr.responseText)["error"]);
         }.bind(this)
       }
     )
   }
 
-  updateService(id) {
-    hToastr.warning("Hahah");
+  updateService(serviceData) {
+    store.dispatch(openGraphiteModal(serviceData, MODE_UPDATE))
   }
 
   deleteService(id) {
@@ -93,12 +98,12 @@ export default class GraphiteServiceListCard extends Component {
       let actionButtons = [{
         url: "#",
         clickFunc: updateService,
-        clickParams: [service.ID],
+        clickParams: [service],
         text: "Update",
       },{
         url: "#",
         clickFunc: deleteService,
-        clickParams: [service.ID],
+        clickParams: [service],
         text: "Delete",
       }];
       let actionButtionList = <DropdownButtonList linkedButtons={actionButtons}/>;
@@ -124,7 +129,9 @@ export default class GraphiteServiceListCard extends Component {
         <div className="card-body">
           <DataTable tableID="graphite_table" headers={tableHeader} rows={tableRows}/>
         </div>
-        <GraphiteServiceUpdateModal/>
+        <Provider store={store}>
+          <GraphiteServiceModal />
+        </Provider>
       </div>
     )
   }

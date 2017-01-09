@@ -26,7 +26,7 @@ export default class SimpleButton extends Component {
   render() {
     let outlineStyle = this.props.isOutline ? "-outline" : "";
     let spinStyle = this.props.isSpin ? "spinner spinner-inverse spinner-sm" : "";
-    let sizeStyle = this.props.size ? `btn-${this.props.btSize}` : "";
+    let sizeStyle = this.props.btSize ? `btn-${this.props.btSize}` : "";
     const btClass = `btn btn${outlineStyle}-${this.props.btStyle} ${sizeStyle} ${spinStyle}`;
     if (this.props.isDisabled) {
       return (
