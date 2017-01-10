@@ -69,20 +69,6 @@ export default class GraphiteServiceListCard extends Component {
 
   deleteService(serviceData) {
     store.dispatch(openGraphiteModal(serviceData, MODE_DELETE));
-    // $.ajax(
-    //   `/api/alerts/${this.props.alertID}/graphiteservices/${id}`,
-    //   {
-    //     method: "DELETE",
-    //     dataType: "json",
-    //     success: function() {
-    //       hToastr.warning("Graphite service has been deleted");
-    //       this.fetchGraphiteServices();
-    //     }.bind(this),
-    //     error: function(xhr, status, err) {
-    //       console.log(xhr.responseText)
-    //     }.bind(this)
-    //   }
-    // )
   }
 
   render() {
