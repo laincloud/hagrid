@@ -3,19 +3,21 @@ import {ADMIN_PAGE, ALERT_PAGE, TCP_PAGE, GRAPHITE_PAGE, NOTIFIER_PAGE} from "..
 import GraphiteServiceListCard from "./graphite/GraphiteServiceListCard";
 import TCPServiceListCard from "./TCPServiceListCard";
 import AlertListCard from "./AlertListCard";
-import { connect } from 'react-redux'
-
+import store from "../common/Store";
+import { connect, Provider } from 'react-redux';
 
 class ContentComponent extends Component {
 
   getPage() {
     switch(this.props.pageMode){
       case ALERT_PAGE:
-        return <AlertListCard alertID={this.props.alertID}/>;
+        return <AlertListCard/>;
       case GRAPHITE_PAGE:
-        return <GraphiteServiceListCard alertID={this.props.alertID}/>;
+        return <GraphiteServiceListCard/>;
+      case BLANK_PAGE:
+        return <BlankCard/>;
       default:
-        return <AlertListCard alertID={this.props.alertID}/>;
+        return <AlertListCard/>;
     }
   }
 
@@ -23,13 +25,11 @@ class ContentComponent extends Component {
     return (
       <div className="layout-content">
           <div className="layout-content-body">
-            <div className="row gutter-xs">
-                <div className="col-md-12">
-                  {
-                    this.getPage()
-                  }
-                </div>
-            </div>
+            <Provider store={store}>
+            {
+              this.getPage()
+            }
+            </Provider>
           </div>
       </div>
     )
@@ -39,7 +39,6 @@ class ContentComponent extends Component {
 
 function mapStateToProps(state) {
   return {
-    alertID: state.sideMenuReducer.alertID,
     pageMode: state.sideMenuReducer.pageMode,
   }
 }

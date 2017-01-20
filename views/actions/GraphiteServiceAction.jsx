@@ -1,4 +1,4 @@
-import { ACTION_OPEN_GRAPHITE_MODAL, ACTION_CLOSE_GRAPHITE_MODAL, MODE_UPDATE, GRAPHITE_PAGE } from "../common/Constants";
+import { ACTION_OPEN_GRAPHITE_MODAL, ACTION_CLOSE_GRAPHITE_MODAL, ACTION_FETCH_GRAPHITE_DATA, GRAPHITE_PAGE } from "../common/Constants";
 import { openContentAction } from "../actions/SideMenuAction";
 import hToastr from "../components/HagridToastr"
 import $ from "jquery";
@@ -28,7 +28,7 @@ function deleteGraphiteService(serviceID, alertID) {
         dataType: "json",
         success: function() {
           hToastr.warning("Graphite service has been deleted");
-          dispatch(openContentAction(alertID, GRAPHITE_PAGE))
+          dispatch(fetchGraphiteServices(alertID));
         }.bind(this),
         error: function(xhr, status, err) {
           console.log(xhr.responseText)
@@ -38,12 +38,85 @@ function deleteGraphiteService(serviceID, alertID) {
   };
 }
 
-function updateGraphiteService() {
+function updateGraphiteService(serviceID, alertID) {
+  return function(dispatch) {
+    $.ajax(
+      `api/alerts/${alertID}/graphiteservices/${serviceID}`,
+      {
+        method: "PUT",
+        dataType: "json",
+        data: $("#graphiteForm").serializeArray(),
+        success: function() {
+          hToastr.success("Update service successfully!");
+          dispatch(closeGraphiteModal());
+          dispatch(fetchGraphiteServices(alertID));
+        }.bind(this),
+        error: function(xhr, status, err) {
+          let errStruct = JSON.parse(xhr.responseText);
+          if (errStruct) {
+            hToastr.error(errStruct["error"]);
+          } else {
+            hToastr.error("Unknown error");
+          }
+        }.bind(this)
+      }
+    )
+  }
 
 }
 
-function addGraphiteService() {
-
+function addGraphiteService(alertID) {
+  return function(dispatch) {
+    $.ajax(
+      `api/alerts/${alertID}/graphiteservices/`,
+      {
+        method: "POST",
+        dataType: "json",
+        data: $("#graphiteForm").serializeArray(),
+        success: function() {
+          hToastr.success("Add service successfully!");
+          dispatch(closeGraphiteModal());
+          dispatch(fetchGraphiteServices(alertID));
+        }.bind(this),
+        error: function(xhr, status, err) {
+          let errStruct = JSON.parse(xhr.responseText);
+          if (errStruct) {
+            hToastr.error(errStruct["error"]);
+          } else {
+            hToastr.error("Unknown error");
+          }
+        }.bind(this)
+      }
+    )
+  }
 }
 
-export {openGraphiteModal, closeGraphiteModal, deleteGraphiteService};
+function fetchGraphiteServices(alertID) {
+  return function(dispatch) {
+    dispatch(openContentAction(alertID, GRAPHITE_PAGE));
+    $.ajax(
+      `/api/alerts/${alertID}/graphiteservices/all`,
+      {
+        method: "GET",
+        dataType: "json",
+        success: function(data) {
+          dispatch(renderGraphiteServicesAction(alertID, data));
+        },
+        error: function(xhr, status, err) {
+          hToastr.error(JSON.parse(xhr.responseText)["error"]);
+          dispatch(renderGraphiteServicesAction(alertID, []));
+        }
+      }
+    )
+  }
+}
+
+function renderGraphiteServicesAction(alertID, services) {
+  return {
+    type: ACTION_FETCH_GRAPHITE_DATA,
+    alertID: alertID,
+    graphiteServices: services,
+  }
+}
+
+export {openGraphiteModal, closeGraphiteModal, deleteGraphiteService, addGraphiteService, updateGraphiteService, fetchGraphiteServices};

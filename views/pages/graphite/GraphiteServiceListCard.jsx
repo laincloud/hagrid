@@ -1,33 +1,28 @@
 import React, {Component} from "react";
 import DataTable from "../../components/DataTable";
 import Label from "../../components/Label";
-import { STYLE_INFO, STYLE_PRIMARY, STYLE_DEFAULT, STYLE_DANGER, STYLE_SUCCESS, STYLE_WARN } from "../../common/Constants";
+import { STYLE_INFO, STYLE_PRIMARY, STYLE_DEFAULT, STYLE_DANGER, STYLE_SUCCESS, STYLE_WARN, SIZE_PILL } from "../../common/Constants";
 import { MODE_ADD, MODE_UPDATE, MODE_DELETE } from "../../common/Constants";
 import $ from "jquery";
 import "datatables.net-bs";
 import DropdownButton, { DropdownButtonList } from "../../components/DropdownButton";
-import hToastr from "../../components/HagridToastr";
+import SimpleButton from "../../components/SimpleButton";
 import WordBreakText from "../../components/WordBreakText";
 import GraphiteServiceModal from "./GraphiteServiceModal";
 import { Provider } from "react-redux";
 import store from "../../common/Store";
+import { connect } from "react-redux";
 import { openGraphiteModal } from "../../actions/GraphiteServiceAction";
 
 
-export default class GraphiteServiceListCard extends Component {
+class GraphiteServiceListCardComponent extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      graphiteServices: [],
-    };
-  }
-
-  componentWillMount() {
-    this.fetchGraphiteServices();
   }
 
   componentDidUpdate() {
+    $("#graphite_table").DataTable().destroy();
     $("#graphite_table").DataTable({
       columnDefs: [{
         orderable: false,
@@ -42,41 +37,18 @@ export default class GraphiteServiceListCard extends Component {
         }
       },
       order: [[0, "asc"]],
-      searching: false,
+      searching: true,
       destroy: true,
+      autoWidth: false,
     });
-  }
-
-  fetchGraphiteServices() {
-    $.ajax(
-      `/api/alerts/${this.props.alertID}/graphiteservices/all`,
-      {
-        method: "GET",
-        dataType: "json",
-        success: function(data) {
-          this.setState({graphiteServices: data})
-        }.bind(this),
-        error: function(xhr, status, err) {
-          hToastr.error(JSON.parse(xhr.responseText)["error"]);
-        }.bind(this)
-      }
-    )
-  }
-
-  updateService(serviceData) {
-    store.dispatch(openGraphiteModal(serviceData, MODE_UPDATE));
-  }
-
-  deleteService(serviceData) {
-    store.dispatch(openGraphiteModal(serviceData, MODE_DELETE));
   }
 
   render() {
     const tableHeader = ["ID", "Name", "Metric", "Check Type", "Warning", "Critical", "Check Attempts", "Resend Time", "Enabled", ""];
-    const updateService = this.updateService.bind(this);
-    const deleteService = this.deleteService.bind(this);
+    const updateService = this.props.updateService.bind(this);
+    const deleteService = this.props.deleteService.bind(this);
     const tableRows = [];
-    this.state.graphiteServices.map(function(service, i) {
+    this.props.graphiteServices.map(function(service, i) {
       let enabledLabel = <Label isOutline={false} labelStyle={STYLE_WARN} text="No"/>;
       if (service["Enabled"]) {
         enabledLabel = <Label isOutline={false} labelStyle={STYLE_SUCCESS} text="Yes"/>;
@@ -108,18 +80,59 @@ export default class GraphiteServiceListCard extends Component {
         actionDropDown,
       ]);
     });
+
+    const isAuthed = this.props.alertID != 0;
     return (
-      <div className="card">
-        <div className="card-header">
-          <h2>Graphite Services</h2>
+      <div>
+        <div className="title-bar">
+          <div className="title-bar-actions">
+            <SimpleButton text="New Service" btSize={SIZE_PILL} btStyle={STYLE_SUCCESS} handleClick={() => this.addService(this.props.alertID)} isDisabled={!isAuthed}/>
+          </div>
+          <h1 className="title-bar-title">
+            <span className="d-ib">Graphite Service</span>
+          </h1>
+          {
+            function() {
+              if (!isAuthed) {
+                return <p className="title-bar-description">
+                  <small>You must select an alert first.</small>
+                </p>
+              }
+            }()
+          }
         </div>
-        <div className="card-body">
-          <DataTable tableID="graphite_table" headers={tableHeader} rows={tableRows}/>
+        <div className="row gutter-xs">
+          <div className="col-md-12">
+            <div className="card">
+              <div className="card-body">
+                <DataTable tableID="graphite_table" headers={tableHeader} rows={tableRows}/>
+              </div>
+              <Provider store={store}>
+                <GraphiteServiceModal />
+              </Provider>
+            </div>
+          </div>
         </div>
-        <Provider store={store}>
-          <GraphiteServiceModal />
-        </Provider>
       </div>
     )
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    alertID: state.graphiteServiceListReducer.alertID,
+    graphiteServices: state.graphiteServiceListReducer.graphiteServices,
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    addService: (alertID) => dispatch(openGraphiteModal({AlertID: alertID}, MODE_ADD)),
+    updateService: (serviceData) => dispatch(openGraphiteModal(serviceData, MODE_UPDATE)),
+    deleteService: (serviceData) => dispatch(openGraphiteModal(serviceData, MODE_DELETE)),
+  }
+}
+
+const GraphiteServiceListCard = connect(mapStateToProps, mapDispatchToProps)(GraphiteServiceListCardComponent);
+
+export default GraphiteServiceListCard;

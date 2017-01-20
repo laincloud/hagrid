@@ -11,7 +11,7 @@ export default class NumberInput extends Component {
 
   componentDidMount() {
     const btClass = `btn btn-${this.props.btStyle ? this.props.btStyle : STYLE_DEFAULT}`;
-    $(`#${this.props.inputID}`).TouchSpin({
+    $(`#${this.props.id}`).TouchSpin({
       min: this.props.minValue ? this.props.minValue : 0,
       max: this.props.maxValue ? this.props.maxValue : 1000,
       step: 1,
@@ -24,15 +24,21 @@ export default class NumberInput extends Component {
   }
 
   render() {
+    const width = this.props.width ? this.props.width : 6;
     return (
-      <input
-        id={this.props.inputID}
-        name={this.props.inputName}
-        className="form-control"
-        style={{imeMode:"disabled"}}
-        type="text"
-        defaultValue={this.props.startValue}
-        onKeyPress={(event) =>{this.ensureNumberInput(event)}}/>
+      <div className="form-group">
+        <label className="col-sm-3 control-label" htmlFor={this.props.id}>{this.props.title}</label>
+        <div className={`col-sm-${width}`}>
+          <input
+            id={this.props.id}
+            name={this.props.name}
+            className="form-control"
+            style={{imeMode:"disabled"}}
+            type="text"
+            defaultValue={this.props.defaultValue}
+            onKeyPress={(event) =>{this.ensureNumberInput(event)}}/>
+        </div>
+      </div>
     )
   }
 }

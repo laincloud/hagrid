@@ -1,5 +1,6 @@
 import { ACTION_OPEN_CONTENT, ACTION_SWITCH_ALERT } from "../common/Constants";
 
+// callTime used to force update the page
 function openContentAction(alertID, pageMode) {
   return {
     type: ACTION_OPEN_CONTENT,
