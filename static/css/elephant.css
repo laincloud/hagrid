@@ -267,7 +267,7 @@ html {
 }
 body {
   font-family: "Roboto", sans-serif;
-  font-size: 13px;
+  font-size: 15px;
   line-height: 1.538462;
   color: #777;
   background-color: #fcfcfc;
@@ -9848,7 +9848,7 @@ select.md-form-control option {
 .sidenav > li > a {
   color: #a6a6a6;
   display: block;
-  font-size: 13px;
+  font-size: 16px;
   line-height: 18px;
   padding: 10px 15px;
   position: relative;
@@ -9915,7 +9915,7 @@ select.md-form-control option {
 }
 .sidenav-heading {
   color: #777;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500;
   line-height: 1;
   margin-bottom: 0;

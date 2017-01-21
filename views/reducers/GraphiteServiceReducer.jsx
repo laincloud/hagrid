@@ -19,7 +19,7 @@ function graphiteServiceReducer(state = {serviceData: {}, mode: MODE_ADD, isOpen
   }
 }
 
-function graphiteServiceListReducer(state = {alertID: 0, graphiteServices: []}, action) {
+function graphiteServiceListReducer(state = {alertID: 3, graphiteServices: []}, action) {
   switch(action.type) {
     case ACTION_FETCH_GRAPHITE_DATA:
       return {

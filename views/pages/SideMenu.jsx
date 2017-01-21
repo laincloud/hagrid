@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { ALERT_PAGE, TCP_PAGE } from "../common/Constants";
 import MenuItem from '../components/MenuItem';
 import store from "../common/Store";
+import { openContentAction } from "../actions/SideMenuAction";
 import { fetchGraphiteServices } from "../actions/GraphiteServiceAction"
 
 class SideMenuComponent extends Component {
@@ -15,7 +16,7 @@ class SideMenuComponent extends Component {
           <div className="custom-scrollbar">
             <nav id="sidenav" className="sidenav-collapse collapse">
               <ul className="sidenav">
-                <li className="sidenav-heading">Choose Alert</li>
+                <li className="sidenav-heading">Manage Alert</li>
                 <MenuItem icon="icon-dashboard" url="#" handleClick={() => {store.dispatch(openContentAction(alertID, ALERT_PAGE))}} title="Alert"/>
                 <li className="sidenav-heading">Services</li>
                 <MenuItem icon="icon-bar-chart-o" url="#" handleClick={() => {store.dispatch(fetchGraphiteServices(alertID))}} title="Graphite"/>

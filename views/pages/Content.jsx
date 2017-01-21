@@ -14,8 +14,6 @@ class ContentComponent extends Component {
         return <AlertListCard/>;
       case GRAPHITE_PAGE:
         return <GraphiteServiceListCard/>;
-      case BLANK_PAGE:
-        return <BlankCard/>;
       default:
         return <AlertListCard/>;
     }

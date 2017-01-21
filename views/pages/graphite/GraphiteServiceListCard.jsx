@@ -23,6 +23,7 @@ class GraphiteServiceListCardComponent extends Component {
 
   componentDidUpdate() {
     $("#graphite_table").DataTable().destroy();
+    console.log("here");
     $("#graphite_table").DataTable({
       columnDefs: [{
         orderable: false,
@@ -53,20 +54,12 @@ class GraphiteServiceListCardComponent extends Component {
       if (service["Enabled"]) {
         enabledLabel = <Label isOutline={false} labelStyle={STYLE_SUCCESS} text="Yes"/>;
       }
-      let buttonTitle = <span className="icon icon-ellipsis-h icon-lg icon-fw"/>;
-      let actionButtons = [{
-        url: "#",
-        clickFunc: updateService,
-        clickParams: [service],
-        text: "Update",
-      },{
-        url: "#",
-        clickFunc: deleteService,
-        clickParams: [service],
-        text: "Delete",
-      }];
-      let actionButtionList = <DropdownButtonList linkedButtons={actionButtons}/>;
-      let actionDropDown = <DropdownButton key={i} dropdownID={`dropdownbutton_${i}`} buttonTitle={buttonTitle} upOrDown="dropdown" buttonList={actionButtionList}/>;
+      let updateSpan = <span className="icon icon-edit"/>;
+      let deleteSpan = <span className="icon icon-trash"/>;
+      let actionGroup = <div className="btn-group btn-group-sm" role="group">
+        <SimpleButton btStyle={STYLE_SUCCESS} text={updateSpan} isOutline={true} isIcon={false} handleClick={() => updateService(service)}/>
+        <SimpleButton btStyle={STYLE_PRIMARY} text={deleteSpan} isOutline={true} isIcon={false} handleClick={() => deleteService(service)}/>
+      </div>;
       tableRows.push([
         service["ID"],
         service["Name"],
@@ -77,7 +70,7 @@ class GraphiteServiceListCardComponent extends Component {
         <Label isOutline={true} labelStyle={STYLE_DEFAULT} text={service["CheckAttempts"]}/>,
         <Label isOutline={true} labelStyle={STYLE_DEFAULT} text={service["ResendTime"]}/>,
         enabledLabel,
-        actionDropDown,
+        actionGroup,
       ]);
     });
 
@@ -86,7 +79,7 @@ class GraphiteServiceListCardComponent extends Component {
       <div>
         <div className="title-bar">
           <div className="title-bar-actions">
-            <SimpleButton text="New Service" btSize={SIZE_PILL} btStyle={STYLE_SUCCESS} handleClick={() => this.addService(this.props.alertID)} isDisabled={!isAuthed}/>
+            <SimpleButton text="New Service" btSize={SIZE_PILL} btStyle={STYLE_SUCCESS} handleClick={() => this.props.addService(this.props.alertID)} isDisabled={!isAuthed}/>
           </div>
           <h1 className="title-bar-title">
             <span className="d-ib">Graphite Service</span>

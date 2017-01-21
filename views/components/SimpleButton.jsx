@@ -10,24 +10,22 @@ export default class SimpleButton extends Component {
       isDisabled: false,
       isOutline: false,
       isSpin: false,
+      isIcon: false,
       text: "",
-      clickParams: [],
     }
 
   }
 
   clickFunc() {
-    if (this.props.handleClick) {
-      const params = this.props.clickParams ? this.props.clickParams : [];
-      this.props.handleClick(...params);
-    }
+    this.props.handleClick();
   }
 
   render() {
     let outlineStyle = this.props.isOutline ? "-outline" : "";
     let spinStyle = this.props.isSpin ? "spinner spinner-inverse spinner-sm" : "";
     let sizeStyle = this.props.btSize ? `btn-${this.props.btSize}` : "";
-    const btClass = `btn btn${outlineStyle}-${this.props.btStyle} ${sizeStyle} ${spinStyle}`;
+    let iconStyle = this.props.isIcon ? "btn-icon sq-18" : "";
+    const btClass = `btn btn${outlineStyle}-${this.props.btStyle} ${sizeStyle} ${spinStyle} ${iconStyle}`;
     if (this.props.isDisabled) {
       return (
         <button className={btClass} onClick={this.clickFunc.bind(this)} type="button" disabled="disabled">{this.props.text}</button>

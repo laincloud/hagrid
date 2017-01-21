@@ -78,11 +78,11 @@ export default class AlertListCard extends Component {
       if (alert["Enabled"]) {
         enabledLabel = <Label isOutline={false} labelStyle={STYLE_SUCCESS} text="Yes"/>;
       }
-      let activeButton = <SimpleButton isDisabled={false} text="active" btSize={SIZE_EX_SMALL} btStyle={STYLE_SUCCESS} handleClick={activeAlert} clickParams={[alert["ID"]]}/>;
+      let activeButton = <SimpleButton isDisabled={false} text="active" btSize={SIZE_EX_SMALL} btStyle={STYLE_SUCCESS} handleClick={() => activeAlert(alert["ID"])} />;
       if (alert["ID"] == alertID) {
         activeButton = <SimpleButton isDisabled={true} text="actived" btSize={SIZE_EX_SMALL} />;
       }
-      let updateButton = <SimpleButton text="update" btSize={SIZE_EX_SMALL} btStyle={STYLE_SUCCESS} handleClick={updateAlert} clickParams={[alert["ID"]]}/>;
+      let updateButton = <SimpleButton text="update" btSize={SIZE_EX_SMALL} btStyle={STYLE_SUCCESS} handleClick={() => updateAlert(alert["ID"])}/>;
 
       tableRows.push([
         alert["ID"],
