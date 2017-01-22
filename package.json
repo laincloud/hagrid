@@ -32,6 +32,7 @@
     "redux-logger": "^2.7.4",
     "redux-promise": "^0.5.3",
     "redux-thunk": "^2.1.0",
+    "select2": "^4.0.3",
     "toastr": "^2.1.2",
     "webpack": "^1.13.1",
     "webpack-dev-server": "^1.14.1"

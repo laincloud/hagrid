@@ -3,11 +3,19 @@ import { connect } from "react-redux";
 import { refreshContentAction } from "../../actions/SideMenuAction";
 import { fetchAlertsAction } from "../../actions/AlertAction";
 import $ from "jquery";
+import "select2";
 
 class AlertSelectorComponent extends Component {
 
   componentWillMount() {
     this.props.handleLoad();
+  }
+
+  componentDidMount() {
+    $("#alertSelect").select2({
+      theme: "bootstrap",
+      width: "100%",
+    })
   }
 
   render() {
@@ -20,7 +28,7 @@ class AlertSelectorComponent extends Component {
         return <option key={i} value={alert["ID"]} >{alert["Name"]}</option>
       }
     }) : <option value="0" >No alerts available</option>;
-    return <select id="alertSelect" className="navbar-search-input" onChange={handleChange}>{optionList}</select>
+    return <select id="alertSelect" className="select2-hidden-accessible navbar-search-input" onChange={handleChange}>{optionList}</select>
   }
 
   handleChange() {

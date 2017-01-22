@@ -3,7 +3,7 @@ import { Modal } from "react-bootstrap";
 import { connect } from "react-redux";
 import SimpleButton from "../../components/SimpleButton";
 import TextInput from "../../components/TextInput";
-import TagInput from "../../components/TagInput";
+import MultiSelect from "../../components/MultiSelect";
 import { STYLE_DEFAULT, STYLE_SUCCESS, STYLE_PRIMARY } from "../../common/Constants";
 import { MODE_DELETE, MODE_UPDATE } from "../../common/Constants";
 import { closeTemplateModal, deleteTemplate, addTemplate, updateTemplate } from "../../actions/TemplateAction";
@@ -14,7 +14,7 @@ class TemplateModalComponent extends Component {
   renderDataModal(isUpdate) {
     let templateID = this.props.templateData["ID"];
     let alertID = this.props.templateData["AlertID"];
-
+    let valueArr = this.props.templateData["Values"] != undefined ? this.props.templateData["Values"].split(",") : [];
     let submitButton = isUpdate ?
       <SimpleButton btStyle={STYLE_SUCCESS} handleClick={() => {this.props.handleUpdate(templateID, alertID)}} text="Update"/>
       : <SimpleButton btStyle={STYLE_SUCCESS} handleClick={() => {this.props.handleAdd(alertID)}} text="Add"/>;
@@ -26,7 +26,7 @@ class TemplateModalComponent extends Component {
         <Modal.Body>
           <form id="templateForm" className="form form-horizontal">
             <TextInput id="templateName" name="name" title="Name" defaultValue={isUpdate ? this.props.templateData["Name"] : ""}/>
-            <TagInput id="templateValues" name="values" title="Values" defaultValue={isUpdate ? this.props.templateData["Values"] : ""}/>
+            <MultiSelect id="templateValues" name="values" title="Values" defaultValue={isUpdate ? valueArr : []}/>
           </form>
         </Modal.Body>
         <Modal.Footer>
