@@ -1,6 +1,9 @@
-import React from "react";
+import React, { Component } from "react";
+import store from "../../common/Store";
+import { connect, Provider } from 'react-redux';
+import AlertSelector from "../alert/AlertSelector";
 
-let NavigatorToggleable = React.createClass({
+export default class NavigatorToggleable extends Component {
     render() {
       return (
         <div className="navbar-toggleable">
@@ -23,11 +26,9 @@ let NavigatorToggleable = React.createClass({
               <li className="hidden-xs hidden-sm">
                 <form className="navbar-search" aria-expanded="true">
                   <div className="navbar-search-group">
-                    <select className="navbar-search-input">
-                      <option>1</option>
-                      <option>2</option>
-                      <option>3</option>
-                    </select>
+                    <Provider store={store}>
+                      <AlertSelector />
+                    </Provider>
                   </div>
                 </form>
               </li>
@@ -43,8 +44,5 @@ let NavigatorToggleable = React.createClass({
             </ul>
           </nav>
         </div>)
-
-    },
-});
-
-export default NavigatorToggleable;
+    }
+}
