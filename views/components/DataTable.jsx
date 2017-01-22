@@ -16,7 +16,7 @@ export default class DataTable extends Component {
           <thead>
             <tr>
               {
-                this.props.headers.map(function(header, i){
+                this.props.headers.map(function(header, i) {
                   return <th key={i}>{header}</th>
                 })
               }

@@ -1,4 +1,3 @@
-import $ from "jquery";
 import { ACTION_FETCH_ALERT_DATA } from "../common/Constants";
 
 function fetchAlertsAction() {

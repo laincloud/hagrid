@@ -6,6 +6,7 @@ import store from "../common/Store";
 import { openContentAction } from "../actions/SideMenuAction";
 import { fetchGraphiteServices } from "../actions/GraphiteServiceAction"
 import { fetchTCPServices } from "../actions/TCPServiceAction";
+import { fetchTemplates } from "../actions/TemplateAction";
 
 class SideMenuComponent extends Component {
   render() {
@@ -24,7 +25,7 @@ class SideMenuComponent extends Component {
                 <MenuItem icon="icon-server" url="#" handleClick={() => {store.dispatch(fetchTCPServices(alertID))}} title="TCP"/>
                 <MenuItem icon="icon-sitemap" url="#" title="HTTP"/>
                 <li className="sidenav-heading">Management</li>
-                <MenuItem icon="icon-font" url="#" title="Templates"/>
+                <MenuItem icon="icon-font" url="#" handleClick={() => {store.dispatch(fetchTemplates(alertID))}} title="Templates"/>
                 <MenuItem icon="icon-bell" url="#" title="Notifiers"/>
                 <MenuItem icon="icon-cog" url="#" title="Administrators"/>
               </ul>

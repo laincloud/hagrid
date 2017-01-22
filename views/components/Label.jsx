@@ -8,17 +8,13 @@ export default class Label extends Component {
   }
 
   render() {
-    let labelStyle = `label label-${STYLE_DEFAULT}`;
-    if (this.props.isOutline) {
-      labelStyle = `label label-outline-${this.props.labelStyle}`
-    } else {
-      labelStyle = `label label-${this.props.labelStyle}`
-    }
-
+    let labelStyle = this.props.isOutline ?
+      `label label-outline-${this.props.labelStyle} m-r m-b`:
+      `label label-${this.props.labelStyle} m-r m-b`;
     return (
-      <span className={labelStyle}>
+      <div className={labelStyle}>
         {this.props.text}
-      </span>
+      </div>
     )
   }
 }

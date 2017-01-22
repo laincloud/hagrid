@@ -41,7 +41,7 @@ function deleteTCPService(serviceID, alertID) {
 function updateTCPService(serviceID, alertID) {
   return function(dispatch) {
     $.ajax(
-      `api/alerts/${alertID}/tcpservices/${serviceID}`,
+      `/api/alerts/${alertID}/tcpservices/${serviceID}`,
       {
         method: "PUT",
         dataType: "json",
@@ -68,7 +68,7 @@ function updateTCPService(serviceID, alertID) {
 function addTCPService(alertID) {
   return function(dispatch) {
     $.ajax(
-      `api/alerts/${alertID}/tcpservices/`,
+      `/api/alerts/${alertID}/tcpservices/`,
       {
         method: "POST",
         dataType: "json",

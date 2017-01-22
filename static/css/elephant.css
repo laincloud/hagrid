@@ -2708,7 +2708,11 @@ tbody.collapse.in {
     right: auto;
   }
 }
-.btn-group,
+.btn-group {
+  position: relative;
+  display: inline-flex;
+  vertical-align: middle;
+}
 .btn-group-vertical {
   position: relative;
   display: inline-block;

@@ -19,7 +19,7 @@ function tcpServiceReducer(state = {serviceData: {}, mode: MODE_ADD, isOpen: fal
   }
 }
 
-function tcpServiceListReducer(state = {alertID: 3, tcpServices: []}, action) {
+function tcpServiceListReducer(state = {alertID: 0, tcpServices: []}, action) {
   switch(action.type) {
     case ACTION_FETCH_TCP_DATA:
       return {

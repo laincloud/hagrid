@@ -1,7 +1,6 @@
 import { ACTION_OPEN_GRAPHITE_MODAL, ACTION_CLOSE_GRAPHITE_MODAL, ACTION_FETCH_GRAPHITE_DATA, GRAPHITE_PAGE } from "../common/Constants";
 import { openContentAction } from "../actions/SideMenuAction";
 import hToastr from "../components/HagridToastr"
-import $ from "jquery";
 
 function openGraphiteModal(serviceData, mode) {
   return {
@@ -41,7 +40,7 @@ function deleteGraphiteService(serviceID, alertID) {
 function updateGraphiteService(serviceID, alertID) {
   return function(dispatch) {
     $.ajax(
-      `api/alerts/${alertID}/graphiteservices/${serviceID}`,
+      `/api/alerts/${alertID}/graphiteservices/${serviceID}`,
       {
         method: "PUT",
         dataType: "json",
@@ -68,7 +67,7 @@ function updateGraphiteService(serviceID, alertID) {
 function addGraphiteService(alertID) {
   return function(dispatch) {
     $.ajax(
-      `api/alerts/${alertID}/graphiteservices/`,
+      `/api/alerts/${alertID}/graphiteservices/`,
       {
         method: "POST",
         dataType: "json",

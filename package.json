@@ -41,6 +41,7 @@
     "babel-loader": "^6.2.4",
     "babel-preset-react": "^6.11.1",
     "bootstrap": "^3.3.7",
+    "bootstrap-touchspin": "^3.1.1",
     "datatables.net": "^1.10.12",
     "datatables.net-bs": "^1.10.12",
     "jquery": "^3.1.1",

@@ -3,7 +3,6 @@ import DataTable from "../../components/DataTable";
 import Label from "../../components/Label";
 import { STYLE_INFO, STYLE_PRIMARY, STYLE_DEFAULT, STYLE_DANGER, STYLE_SUCCESS, STYLE_WARN, SIZE_PILL } from "../../common/Constants";
 import { MODE_ADD, MODE_UPDATE, MODE_DELETE } from "../../common/Constants";
-import $ from "jquery";
 import "datatables.net-bs";
 import SimpleButton from "../../components/SimpleButton";
 import WordBreakText from "../../components/WordBreakText";
