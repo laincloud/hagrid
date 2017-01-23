@@ -8254,7 +8254,7 @@ html[xmlns] .flexslider .slides {
   overflow-y: auto;
 }
 .select2-container--bootstrap .select2-selection--single {
-  height: 34px;
+  height: 100%;
   line-height: 1.538462;
   padding: 6px 24px 6px 12px;
   /**

@@ -49,7 +49,7 @@ class TemplateListCardComponent extends Component {
   }
 
   render() {
-    const tableHeader = ["ID", "Name", "Values", ""];
+    const tableHeader = ["ID", "Name", "Values", "Operations"];
     const updateTemplate = this.props.updateTemplate.bind(this);
     const deleteTemplate = this.props.deleteTemplate.bind(this);
     const tableRows = [];

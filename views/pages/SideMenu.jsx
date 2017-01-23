@@ -19,7 +19,7 @@ class SideMenuComponent extends Component {
             <nav id="sidenav" className="sidenav-collapse collapse">
               <ul className="sidenav">
                 <li className="sidenav-heading">Manage Alert</li>
-                <MenuItem icon="icon-dashboard" url="#" handleClick={() => {store.dispatch(openContentAction(alertID, ALERT_PAGE))}} title="Alert"/>
+                <MenuItem icon="icon-home" url="#" handleClick={() => {store.dispatch(openContentAction(alertID, ALERT_PAGE))}} title="Alert"/>
                 <li className="sidenav-heading">Services</li>
                 <MenuItem icon="icon-bar-chart-o" url="#" handleClick={() => {store.dispatch(fetchGraphiteServices(alertID))}} title="Graphite"/>
                 <MenuItem icon="icon-server" url="#" handleClick={() => {store.dispatch(fetchTCPServices(alertID))}} title="TCP"/>

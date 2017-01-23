@@ -26,9 +26,15 @@ export default class NavigatorToggleable extends Component {
               <li className="hidden-xs hidden-sm">
                 <form className="navbar-search" aria-expanded="true">
                   <div className="navbar-search-group">
-                    <Provider store={store}>
-                      <AlertSelector />
-                    </Provider>
+                    <div className="input-group">
+                      <span className="input-group-addon">
+                        <span className="icon icon-database icon-lg"/>
+                      </span>
+                      <Provider store={store}>
+                        <AlertSelector />
+                      </Provider>
+                    </div>
+
                   </div>
                 </form>
               </li>

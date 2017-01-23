@@ -12,27 +12,27 @@ class AlertSelectorComponent extends Component {
   }
 
   componentDidMount() {
+    const handleSelect = this.props.handleSelect;
     $("#alertSelect").select2({
       theme: "bootstrap",
       width: "100%",
-    })
+      placeholder: "Select an alert",
+    }).on("select2:select", function(e){
+      handleSelect(e.target.value);
+    });
   }
 
   render() {
     const currentID = this.props.currentID;
-    const handleChange = this.handleChange.bind(this);
-    const optionList = this.props.alerts.length > 0 ? this.props.alerts.map(function(alert, i){
-      if (currentID == alert["ID"]) {
-        return <option key={i} value={alert["ID"]} selected="selected">{alert["Name"]}</option>
-      } else {
-        return <option key={i} value={alert["ID"]} >{alert["Name"]}</option>
-      }
-    }) : <option value="0" >No alerts available</option>;
-    return <select id="alertSelect" className="select2-hidden-accessible navbar-search-input" onChange={handleChange}>{optionList}</select>
-  }
+    const optionsList = [<option key="opt_0"/>];
 
-  handleChange() {
-    this.props.handleSelect($("#alertSelect").val());
+    this.props.alerts.map(function(alert, i) {
+      let option = currentID == alert["ID"] ?
+        <option key={i} value={alert["ID"]} selected="selected">{alert["Name"]}</option>:
+        <option key={i} value={alert["ID"]} >{alert["Name"]}</option>;
+      optionsList.push(option);
+    });
+    return <select id="alertSelect" className="navbar-select-input">{optionsList}</select>
   }
 }
 

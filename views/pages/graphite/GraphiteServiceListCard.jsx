@@ -50,7 +50,7 @@ class GraphiteServiceListCardComponent extends Component {
   }
 
   render() {
-    const tableHeader = ["ID", "Name", "Metric", "Check Type", "Warning", "Critical", "Check Attempts", "Resend Time", "Enabled", ""];
+    const tableHeader = ["ID", "Name", "Metric", "Check Type", "Warning", "Critical", "Check Attempts", "Resend Time", "Enabled", "Operations"];
     const updateService = this.props.updateService.bind(this);
     const deleteService = this.props.deleteService.bind(this);
     const tableRows = [];

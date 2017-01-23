@@ -51,7 +51,7 @@ class TCPServiceListCardComponent extends Component {
   }
 
   render() {
-    const tableHeader = ["ID", "Name", "Host", "Port", "Check Attempts", "Resend Time", "Enabled", ""];
+    const tableHeader = ["ID", "Name", "Host", "Port", "Check Attempts", "Resend Time", "Enabled", "Operations"];
     const updateService = this.props.updateService.bind(this);
     const deleteService = this.props.deleteService.bind(this);
     const tableRows = [];

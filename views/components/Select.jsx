@@ -1,6 +1,16 @@
 import React, { Component } from "react";
+import $ from "jquery";
+import "select2";
 
 export default class Select extends Component {
+
+  componentDidMount() {
+    $(`#${this.props.id}`).select2({
+      theme: "bootstrap",
+      width: "100%",
+    })
+  }
+
   render() {
     const width = this.props.width ? this.props.width : 6;
     return (

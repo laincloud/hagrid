@@ -1,6 +1,7 @@
 package models
 
 import (
+	"strings"
 	"time"
 )
 
@@ -25,6 +26,16 @@ func SaveTemplate(template *Template) error {
 	if isTemplateDuplicated(template) {
 		return ErrorDuplicatedName
 	}
+	values := strings.Split(template.Values, ",")
+	uniqValues := make([]string, 0, len(values))
+	valuesMap := make(map[string]bool)
+	for _, value := range values {
+		valuesMap[strings.TrimSpace(value)] = false
+	}
+	for k := range valuesMap {
+		uniqValues = append(uniqValues, k)
+	}
+	template.Values = strings.Join(uniqValues, ",")
 	return db.Save(template).Error
 }
 
