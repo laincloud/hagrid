@@ -3,7 +3,9 @@ import store from "../../common/Store";
 import { connect, Provider } from 'react-redux';
 import AlertSelector from "../alert/AlertSelector";
 import UserProfileModal from "../user/UserProfileModal";
+import AlertModal from "../alert/AlertModal";
 import { openUserProfileModal } from "../../actions/UserAction";
+import { openAlertModal } from "../../actions/AlertAction";
 
 export default class NavigatorToggleable extends Component {
     render() {
@@ -38,8 +40,10 @@ export default class NavigatorToggleable extends Component {
                       <Provider store={store}>
                         <UserProfileModal />
                       </Provider>
+                      <Provider store={store}>
+                        <AlertModal />
+                      </Provider>
                     </div>
-
                   </div>
                 </form>
               </li>
@@ -50,6 +54,7 @@ export default class NavigatorToggleable extends Component {
                 </button>
                   <ul className="dropdown-menu dropdown-menu-right">
                     <li><a href="#" onClick={() => store.dispatch(openUserProfileModal())}>Profile</a></li>
+                    <li><a href="#" onClick={() => store.dispatch(openAlertModal())}>Add alert</a></li>
                     <li className="divider"/>
                     <li><a href="/logout">Sign out</a></li>
                   </ul>

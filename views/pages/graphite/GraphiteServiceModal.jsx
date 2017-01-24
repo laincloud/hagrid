@@ -29,7 +29,7 @@ class GraphiteServiceModalComponent extends Component {
     return (
       <Modal show={this.props.isOpen} onHide={this.props.handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Update graphite service</Modal.Title>
+          <Modal.Title>{isUpdate ? "Update" : "Add"} graphite service</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form id="graphiteForm" className="form form-horizontal">

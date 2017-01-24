@@ -21,7 +21,7 @@ class TemplateModalComponent extends Component {
     return (
       <Modal show={this.props.isOpen} onHide={this.props.handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Update template</Modal.Title>
+          <Modal.Title>{isUpdate ? "Update" : "Add"} template</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form id="templateForm" className="form form-horizontal">
