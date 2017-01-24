@@ -22,7 +22,7 @@ class TCPServiceModalComponent extends Component {
     return (
       <Modal show={this.props.isOpen} onHide={this.props.handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>{isUpdate ? "Update" : "Add"} graphite service</Modal.Title>
+          <Modal.Title>{isUpdate ? "Update" : "Add"} TCP service</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form id="tcpForm" className="form form-horizontal">

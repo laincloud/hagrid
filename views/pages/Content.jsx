@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import {ADMIN_PAGE, ALERT_PAGE, TCP_PAGE, GRAPHITE_PAGE, TEMPLATE_PAGE, NOTIFIER_PAGE} from "../common/Constants";
 import GraphiteServiceListCard from "./graphite/GraphiteServiceListCard";
 import TCPServiceListCard from "./tcp/TCPServiceListCard";
-import AlertListCard from "./AlertListCard";
+import AlertCard from "./alert/AlertCard";
 import TemplateListCard from "./template/TemplateListCard";
 import store from "../common/Store";
 import { connect, Provider } from 'react-redux';
@@ -12,7 +12,7 @@ class ContentComponent extends Component {
   getPage() {
     switch(this.props.pageMode){
       case ALERT_PAGE:
-        return <AlertListCard/>;
+        return <AlertCard/>;
       case GRAPHITE_PAGE:
         return <GraphiteServiceListCard/>;
       case TCP_PAGE:
@@ -20,7 +20,7 @@ class ContentComponent extends Component {
       case TEMPLATE_PAGE:
         return <TemplateListCard/>;
       default:
-        return <AlertListCard/>;
+        return <AlertCard/>;
     }
   }
 

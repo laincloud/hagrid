@@ -51,6 +51,31 @@ function addAlert() {
   }
 }
 
+function updateAlert(alertID) {
+  return function(dispatch) {
+    $.ajax(
+      `/api/alerts/${alertID}`,
+      {
+        method: "PUT",
+        dataType: "json",
+        data: $("#updateAlertForm").serializeArray(),
+        success: function() {
+          hToastr.success("Save alert successfully!");
+          dispatch(fetchAlertsAction());
+        }.bind(this),
+        error: function(xhr, status, err) {
+          let errStruct = JSON.parse(xhr.responseText);
+          if (errStruct) {
+            hToastr.error(errStruct["error"]);
+          } else {
+            hToastr.error("Unknown error");
+          }
+        }.bind(this)
+      }
+    )
+  }
+}
+
 function openAlertModal() {
   return {
     type: ACTION_OPEN_ALERT_MODAL,
@@ -70,4 +95,4 @@ function renderAlertsAction(alerts) {
   }
 }
 
-export {fetchAlertsAction, openAlertModal, closeAlertModal, addAlert}
+export {fetchAlertsAction, openAlertModal, closeAlertModal, addAlert, updateAlert}

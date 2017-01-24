@@ -21,7 +21,7 @@ class AlertModalComponent extends Component {
           </form>
         </Modal.Body>
         <Modal.Footer>
-          <SimpleButton btStyle={STYLE_SUCCESS} handleClick={this.props.handleAdd} text="Update"/>
+          <SimpleButton btStyle={STYLE_SUCCESS} handleClick={this.props.handleAdd} text="Add"/>
           <SimpleButton btStyle={STYLE_DEFAULT} handleClick={this.props.handleClose} text="Close"/>
         </Modal.Footer>
       </Modal>

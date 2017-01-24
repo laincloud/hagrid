@@ -11,7 +11,8 @@ class AlertSelectorComponent extends Component {
     this.props.handleLoad();
   }
 
-  componentDidMount() {
+  componentDidUpdate() {
+    console.log("here");
     const handleSelect = this.props.handleSelect;
     $("#alertSelect").select2({
       theme: "bootstrap",
@@ -25,7 +26,6 @@ class AlertSelectorComponent extends Component {
   render() {
     const currentID = this.props.currentID;
     const optionsList = [<option key="opt_0"/>];
-
     this.props.alerts.map(function(alert, i) {
       let option = currentID == alert["ID"] ?
         <option key={i} value={alert["ID"]} selected="selected">{alert["Name"]}</option>:
