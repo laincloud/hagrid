@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import store from "../../common/Store";
 import { connect, Provider } from 'react-redux';
 import AlertSelector from "../alert/AlertSelector";
+import UserProfileModal from "../user/UserProfileModal";
+import { openUserProfileModal } from "../../actions/UserAction";
 
 export default class NavigatorToggleable extends Component {
     render() {
@@ -33,6 +35,9 @@ export default class NavigatorToggleable extends Component {
                       <Provider store={store}>
                         <AlertSelector />
                       </Provider>
+                      <Provider store={store}>
+                        <UserProfileModal />
+                      </Provider>
                     </div>
 
                   </div>
@@ -40,10 +45,12 @@ export default class NavigatorToggleable extends Component {
               </li>
               <li className="dropdown hidden-xs">
                 <button className="navbar-account-btn" data-toggle="dropdown" aria-haspopup="true">
-                  <img className="rounded" width="36" height="36" src="static/img/0180441436.jpg" alt="Teddy Wilson"/> Teddy Wilson
+                  <img className="rounded" width="36" height="36" src="static/img/0180441436.jpg" alt="Teddy Wilson"/> Settings
                     <span className="caret"/>
                 </button>
                   <ul className="dropdown-menu dropdown-menu-right">
+                    <li><a href="#" onClick={() => store.dispatch(openUserProfileModal())}>Profile</a></li>
+                    <li className="divider"/>
                     <li><a href="/logout">Sign out</a></li>
                   </ul>
               </li>
