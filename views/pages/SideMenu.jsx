@@ -7,6 +7,7 @@ import { openContentAction } from "../actions/SideMenuAction";
 import { fetchGraphiteServices } from "../actions/GraphiteServiceAction"
 import { fetchTCPServices } from "../actions/TCPServiceAction";
 import { fetchTemplates } from "../actions/TemplateAction";
+import { fetchAdmins } from "../actions/AdminAction";
 
 class SideMenuComponent extends Component {
   render() {
@@ -27,7 +28,7 @@ class SideMenuComponent extends Component {
                 <li className="sidenav-heading">Management</li>
                 <MenuItem icon="icon-font" url="#" handleClick={() => {store.dispatch(fetchTemplates(alertID))}} title="Templates"/>
                 <MenuItem icon="icon-bell" url="#" title="Notifiers"/>
-                <MenuItem icon="icon-cog" url="#" title="Administrators"/>
+                <MenuItem icon="icon-cog" url="#" handleClick={() => {store.dispatch(fetchAdmins(alertID))}} title="Administrators"/>
               </ul>
             </nav>
           </div>

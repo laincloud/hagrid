@@ -83,7 +83,7 @@ func isNotifierDuplicated(alertID, notifierID int) bool {
 }
 
 func GetAdminsByAlertID(id int, admins *[]User) error {
-	return db.Model(&Alert{ID: id}).Select("id, name").Association("Admins").Find(admins).Error
+	return db.Model(&Alert{ID: id}).Association("Admins").Find(admins).Error
 }
 
 func DeleteAdmin(alertID, adminID int) error {

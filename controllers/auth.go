@@ -32,21 +32,26 @@ func (this *AuthController) Prepare() {
 
 	user := &models.User{}
 	if err = models.GetUser(userName, user); err != nil {
-		controllerLogger.Printf("GetUser in PostAlert failed: %s", err.Error())
+		controllerLogger.Printf("GetUser in prepare failed: %s", err.Error())
 		this.outputError(http.StatusInternalServerError, errorMsg500)
 		this.ServeJSON()
 		this.StopRun()
 	}
 
-	alertIDStr := this.Ctx.Input.Param(":alert_id")
 	if userName == config.GetSuperUser() {
 		if err = models.GetAllAlerts(&user.AdminedAlerts); err != nil {
 			this.outputError(http.StatusInternalServerError, "Authorization failed")
 			this.ServeJSON()
 			this.StopRun()
 		}
-		// If user sets alert_id in the URL, then we need to check whether he/she has the privilege to write
-	} else if alertID, err := strconv.Atoi(alertIDStr); err == nil {
+	}
+	// If user sets alert_id in the URL, then we need to check whether he/she has the privilege to write
+	if alertID, err := strconv.Atoi(this.Ctx.Input.Param(":alert_id")); err == nil {
+		if alertID <= 0 {
+			this.outputError(http.StatusBadRequest, "You must select an alert first")
+			this.ServeJSON()
+			this.StopRun()
+		}
 		var hasAuth bool
 		for _, alert := range user.AdminedAlerts {
 			if alertID == alert.ID {

@@ -12,7 +12,6 @@ class AlertSelectorComponent extends Component {
   }
 
   componentDidUpdate() {
-    console.log("here");
     const handleSelect = this.props.handleSelect;
     $("#alertSelect").select2({
       theme: "bootstrap",

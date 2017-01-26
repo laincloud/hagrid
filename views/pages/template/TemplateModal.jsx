@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import SimpleButton from "../../components/SimpleButton";
 import TextInput from "../../components/TextInput";
 import MultiSelect from "../../components/MultiSelect";
+import AlertFont from "../../components/AlertFont";
 import { STYLE_DEFAULT, STYLE_SUCCESS, STYLE_PRIMARY } from "../../common/Constants";
 import { MODE_DELETE, MODE_UPDATE } from "../../common/Constants";
 import { closeTemplateModal, deleteTemplate, addTemplate, updateTemplate } from "../../actions/TemplateAction";
@@ -47,8 +48,8 @@ class TemplateModalComponent extends Component {
           <Modal.Title>Delete template</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <h4>Do you really want to delete <font color="red"> {this.props.templateData["Name"]}</font> ?</h4>
-          <p><font color="red">The operation can't be undo.</font></p>
+          <h4>Do you really want to delete <AlertFont text={this.props.templateData["Name"]}/> ?</h4>
+          <p><AlertFont text="The operation can't be undo."/></p>
         </Modal.Body>
         <Modal.Footer>
           <SimpleButton btStyle={STYLE_DEFAULT} handleClick={this.props.handleClose} text="Close"/>

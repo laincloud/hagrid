@@ -1,10 +1,10 @@
-import { ACTION_OPEN_CONTENT, ACTION_SWITCH_ALERT, GRAPHITE_PAGE, TCP_PAGE, TEMPLATE_PAGE } from "../common/Constants";
+import { ACTION_OPEN_CONTENT, ACTION_SWITCH_ALERT, GRAPHITE_PAGE, TCP_PAGE, TEMPLATE_PAGE, ADMIN_PAGE } from "../common/Constants";
 import store from "../common/Store";
 import { fetchGraphiteServices } from "./GraphiteServiceAction";
 import { fetchTCPServices } from "./TCPServiceAction";
 import { fetchTemplates } from "./TemplateAction";
+import { fetchAdmins } from "./AdminAction";
 
-// callTime used to force update the page
 function openContentAction(alertID, pageMode) {
   return {
     type: ACTION_OPEN_CONTENT,
@@ -25,6 +25,9 @@ function refreshContentAction(alertID) {
         break;
       case TEMPLATE_PAGE:
         dispatch(fetchTemplates(alertID));
+        break;
+      case ADMIN_PAGE:
+        dispatch(fetchAdmins(alertID));
         break;
       default:
         break;

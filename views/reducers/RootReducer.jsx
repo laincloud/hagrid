@@ -5,6 +5,7 @@ import { graphiteServiceReducer, graphiteServiceListReducer } from "./GraphiteSe
 import { tcpServiceReducer, tcpServiceListReducer } from "./TCPServiceReducer";
 import { templateReducer, templateListReducer } from "./TemplateReducer";
 import userReducer from "./UserReducer";
+import adminReducer from "./AdminReducer";
 
 const RootReducer = combineReducers({
   alertReducer,
@@ -16,6 +17,7 @@ const RootReducer = combineReducers({
   templateReducer,
   templateListReducer,
   userReducer,
+  adminReducer,
 });
 
 export default RootReducer;

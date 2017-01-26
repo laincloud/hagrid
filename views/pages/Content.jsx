@@ -4,6 +4,7 @@ import GraphiteServiceListCard from "./graphite/GraphiteServiceListCard";
 import TCPServiceListCard from "./tcp/TCPServiceListCard";
 import AlertCard from "./alert/AlertCard";
 import TemplateListCard from "./template/TemplateListCard";
+import AdminListCard from "./admin/AdminListCard";
 import store from "../common/Store";
 import { connect, Provider } from 'react-redux';
 
@@ -19,6 +20,8 @@ class ContentComponent extends Component {
         return <TCPServiceListCard/>;
       case TEMPLATE_PAGE:
         return <TemplateListCard/>;
+      case ADMIN_PAGE:
+        return <AdminListCard/>;
       default:
         return <AlertCard/>;
     }

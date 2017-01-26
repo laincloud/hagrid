@@ -7,6 +7,7 @@ import TextInput from "../../components/TextInput";
 import TextArea from "../../components/TextArea";
 import Select from "../../components/Select";
 import CheckBox from "../../components/CheckBox";
+import AlertFont from "../../components/AlertFont";
 import { STYLE_DEFAULT, STYLE_SUCCESS, STYLE_PRIMARY } from "../../common/Constants";
 import { MODE_DELETE, MODE_UPDATE } from "../../common/Constants";
 import { closeGraphiteModal, deleteGraphiteService, addGraphiteService, updateGraphiteService } from "../../actions/GraphiteServiceAction";
@@ -61,8 +62,8 @@ class GraphiteServiceModalComponent extends Component {
           <Modal.Title>Delete graphite service</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <h4>Do you really want to delete <font color="red"> {this.props.serviceData["Name"]}</font> ?</h4>
-          <p><font color="red">The operation can't be undo.</font></p>
+          <h4>Do you really want to delete <AlertFont text={this.props.serviceData["Name"]}/> ?</h4>
+          <p><AlertFont text="The operation can't be undo."/></p>
         </Modal.Body>
         <Modal.Footer>
           <SimpleButton btStyle={STYLE_DEFAULT} handleClick={this.props.handleClose} text="Close"/>
