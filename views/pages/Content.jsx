@@ -5,6 +5,7 @@ import TCPServiceListCard from "./tcp/TCPServiceListCard";
 import AlertCard from "./alert/AlertCard";
 import TemplateListCard from "./template/TemplateListCard";
 import AdminListCard from "./admin/AdminListCard";
+import NotifierListCard from "./notifier/NotifierListCard";
 import store from "../common/Store";
 import { connect, Provider } from 'react-redux';
 
@@ -22,6 +23,8 @@ class ContentComponent extends Component {
         return <TemplateListCard/>;
       case ADMIN_PAGE:
         return <AdminListCard/>;
+      case NOTIFIER_PAGE:
+        return <NotifierListCard/>;
       default:
         return <AlertCard/>;
     }

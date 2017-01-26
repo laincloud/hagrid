@@ -6,6 +6,7 @@ import { tcpServiceReducer, tcpServiceListReducer } from "./TCPServiceReducer";
 import { templateReducer, templateListReducer } from "./TemplateReducer";
 import userReducer from "./UserReducer";
 import adminReducer from "./AdminReducer";
+import notifierReducer from "./NotifierReducer";
 
 const RootReducer = combineReducers({
   alertReducer,
@@ -18,6 +19,7 @@ const RootReducer = combineReducers({
   templateListReducer,
   userReducer,
   adminReducer,
+  notifierReducer,
 });
 
 export default RootReducer;

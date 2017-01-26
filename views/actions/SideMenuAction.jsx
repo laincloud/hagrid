@@ -1,9 +1,10 @@
-import { ACTION_OPEN_CONTENT, ACTION_SWITCH_ALERT, GRAPHITE_PAGE, TCP_PAGE, TEMPLATE_PAGE, ADMIN_PAGE } from "../common/Constants";
+import { ACTION_OPEN_CONTENT, ACTION_SWITCH_ALERT, GRAPHITE_PAGE, TCP_PAGE, TEMPLATE_PAGE, ADMIN_PAGE, NOTIFIER_PAGE } from "../common/Constants";
 import store from "../common/Store";
 import { fetchGraphiteServices } from "./GraphiteServiceAction";
 import { fetchTCPServices } from "./TCPServiceAction";
 import { fetchTemplates } from "./TemplateAction";
 import { fetchAdmins } from "./AdminAction";
+import { fetchNotifiers } from "./NotifierAction";
 
 function openContentAction(alertID, pageMode) {
   return {
@@ -28,6 +29,9 @@ function refreshContentAction(alertID) {
         break;
       case ADMIN_PAGE:
         dispatch(fetchAdmins(alertID));
+        break;
+      case NOTIFIER_PAGE:
+        dispatch(fetchNotifiers(alertID));
         break;
       default:
         break;
