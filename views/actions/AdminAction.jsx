@@ -2,6 +2,7 @@ import $ from "jquery";
 import hToastr from "../components/HagridToastr";
 import { ACTION_FETCH_ADMIN_DATA, ADMIN_PAGE, ACTION_CLOSE_ADMIN_MODAL, ACTION_OPEN_ADMIN_MODAL } from "../common/Constants";
 import { openContentAction } from "./SideMenuAction"
+import { outputErrorMsg } from "../common/Utils";
 
 function openAdminModal(adminData) {
   return {
@@ -30,12 +31,7 @@ function addAdmin(alertID) {
           dispatch(fetchAdmins(alertID));
         }.bind(this),
         error: function(xhr, status, err) {
-          let errStruct = JSON.parse(xhr.responseText);
-          if (errStruct) {
-            hToastr.error(errStruct["error"]);
-          } else {
-            hToastr.error("Unknown error");
-          }
+          outputErrorMsg(xhr.responseText);
         }.bind(this)
       }
     )
@@ -55,7 +51,7 @@ function deleteAdmin(adminID, alertID) {
           dispatch(fetchAdmins(alertID));
         }.bind(this),
         error: function(xhr, status, err) {
-          console.log(xhr.responseText)
+          outputErrorMsg(xhr.responseText);
         }.bind(this)
       }
     )
@@ -74,7 +70,7 @@ function fetchAdmins(alertID) {
           dispatch(renderAdminsAction(alertID, data));
         },
         error: function(xhr, status, err) {
-          hToastr.error(JSON.parse(xhr.responseText)["error"]);
+          outputErrorMsg(xhr.responseText);
           dispatch(renderAdminsAction(alertID, []));
         }
       }

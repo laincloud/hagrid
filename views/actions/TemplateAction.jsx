@@ -2,6 +2,7 @@ import { ACTION_OPEN_TEMPLATE_MODAL, ACTION_CLOSE_TEMPLATE_MODAL, ACTION_FETCH_T
 import { openContentAction } from "../actions/SideMenuAction";
 import hToastr from "../components/HagridToastr";
 import $ from "jquery";
+import { outputErrorMsg } from "../common/Utils";
 
 function openTemplateModal(templateData, mode) {
   return {
@@ -31,7 +32,7 @@ function deleteTemplate(templateID, alertID) {
           dispatch(fetchTemplates(alertID));
         }.bind(this),
         error: function(xhr, status, err) {
-          console.log(xhr.responseText)
+          outputErrorMsg(xhr.responseText);
         }.bind(this)
       }
     )
@@ -52,12 +53,7 @@ function updateTemplate(templateID, alertID) {
           dispatch(fetchTemplates(alertID));
         }.bind(this),
         error: function(xhr, status, err) {
-          let errStruct = JSON.parse(xhr.responseText);
-          if (errStruct) {
-            hToastr.error(errStruct["error"]);
-          } else {
-            hToastr.error("Unknown error");
-          }
+          outputErrorMsg(xhr.responseText);
         }.bind(this)
       }
     )
@@ -79,12 +75,7 @@ function addTemplate(alertID) {
           dispatch(fetchTemplates(alertID));
         }.bind(this),
         error: function(xhr, status, err) {
-          let errStruct = JSON.parse(xhr.responseText);
-          if (errStruct) {
-            hToastr.error(errStruct["error"]);
-          } else {
-            hToastr.error("Unknown error");
-          }
+          outputErrorMsg(xhr.responseText);
         }.bind(this)
       }
     )
@@ -103,7 +94,7 @@ function fetchTemplates(alertID) {
           dispatch(renderTemplatesAction(alertID, data));
         },
         error: function(xhr, status, err) {
-          hToastr.error(JSON.parse(xhr.responseText)["error"]);
+          outputErrorMsg(xhr.responseText);
           dispatch(renderTemplatesAction(alertID, []));
         }
       }

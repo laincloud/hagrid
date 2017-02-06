@@ -2,6 +2,7 @@ import $ from "jquery";
 import hToastr from "../components/HagridToastr";
 import { ACTION_FETCH_NOTIFIER_DATA, NOTIFIER_PAGE, ACTION_OPEN_NOTIFIER_MODAL, ACTION_CLOSE_NOTIFIER_MODAL } from "../common/Constants";
 import { openContentAction } from "./SideMenuAction"
+import { outputErrorMsg } from "../common/Utils";
 
 function openNotifierModal(notifierData) {
   return {
@@ -30,12 +31,7 @@ function addNotifier(alertID) {
           dispatch(fetchNotifiers(alertID));
         }.bind(this),
         error: function(xhr, status, err) {
-          let errStruct = JSON.parse(xhr.responseText);
-          if (errStruct) {
-            hToastr.error(errStruct["error"]);
-          } else {
-            hToastr.error("Unknown error");
-          }
+          outputErrorMsg(xhr.responseText);
         }.bind(this)
       }
     )
@@ -55,7 +51,7 @@ function deleteNotifier(notifierID, alertID) {
           dispatch(fetchNotifiers(alertID));
         }.bind(this),
         error: function(xhr, status, err) {
-          console.log(xhr.responseText)
+          outputErrorMsg(xhr.responseText);
         }.bind(this)
       }
     )
@@ -74,7 +70,7 @@ function fetchNotifiers(alertID) {
           dispatch(renderNotifiersAction(alertID, data));
         },
         error: function(xhr, status, err) {
-          hToastr.error(JSON.parse(xhr.responseText)["error"]);
+          outputErrorMsg(xhr.responseText);
           dispatch(renderNotifiersAction(alertID, []));
         }
       }

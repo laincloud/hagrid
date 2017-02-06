@@ -1,6 +1,8 @@
 import { ACTION_OPEN_GRAPHITE_MODAL, ACTION_CLOSE_GRAPHITE_MODAL, ACTION_FETCH_GRAPHITE_DATA, GRAPHITE_PAGE } from "../common/Constants";
 import { openContentAction } from "../actions/SideMenuAction";
-import hToastr from "../components/HagridToastr"
+import hToastr from "../components/HagridToastr";
+import $ from "jquery";
+import { outputErrorMsg } from "../common/Utils";
 
 function openGraphiteModal(serviceData, mode) {
   return {
@@ -30,7 +32,7 @@ function deleteGraphiteService(serviceID, alertID) {
           dispatch(fetchGraphiteServices(alertID));
         }.bind(this),
         error: function(xhr, status, err) {
-          console.log(xhr.responseText)
+          outputErrorMsg(xhr.responseText);
         }.bind(this)
       }
     )
@@ -51,12 +53,7 @@ function updateGraphiteService(serviceID, alertID) {
           dispatch(fetchGraphiteServices(alertID));
         }.bind(this),
         error: function(xhr, status, err) {
-          let errStruct = JSON.parse(xhr.responseText);
-          if (errStruct) {
-            hToastr.error(errStruct["error"]);
-          } else {
-            hToastr.error("Unknown error");
-          }
+          outputErrorMsg(xhr.responseText);
         }.bind(this)
       }
     )
@@ -78,12 +75,7 @@ function addGraphiteService(alertID) {
           dispatch(fetchGraphiteServices(alertID));
         }.bind(this),
         error: function(xhr, status, err) {
-          let errStruct = JSON.parse(xhr.responseText);
-          if (errStruct) {
-            hToastr.error(errStruct["error"]);
-          } else {
-            hToastr.error("Unknown error");
-          }
+          outputErrorMsg(xhr.responseText);
         }.bind(this)
       }
     )
@@ -102,7 +94,7 @@ function fetchGraphiteServices(alertID) {
           dispatch(renderGraphiteServicesAction(alertID, data));
         },
         error: function(xhr, status, err) {
-          hToastr.error(JSON.parse(xhr.responseText)["error"]);
+          outputErrorMsg(xhr.responseText);
           dispatch(renderGraphiteServicesAction(alertID, []));
         }
       }

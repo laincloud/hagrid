@@ -1,19 +1,10 @@
-export function createReducer(initialState, handlers) {
-    return function(state = initialState, action) {
-        if (handlers.hasOwnProperty(action.type)) {
-            return handlers[action.type](state, action);
-        } else {
-            return state;
-        }
-    }
-}
+import hToastr from "../components/HagridToastr";
 
-export function createAction(type, ...argNames) {
-    return function(...args) {
-        let action = { type };
-        _.forEach(argNames, (arg, index) => {
-            action[arg] = args[index];
-        });
-        return action;
-    }
+export function outputErrorMsg(responseText) {
+  let errStruct = JSON.parse(responseText);
+  if (errStruct) {
+    hToastr.error(errStruct["error"]);
+  } else {
+    hToastr.error("Unknown error");
+  }
 }

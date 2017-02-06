@@ -1,6 +1,7 @@
 import { ACTION_FETCH_ALERT_DATA, ACTION_OPEN_ALERT_MODAL, ACTION_CLOSE_ALERT_MODAL } from "../common/Constants";
 import $ from "jquery";
 import hToastr from "../components/HagridToastr";
+import { outputErrorMsg } from "../common/Utils";
 
 function fetchAlertsAction() {
   return function(dispatch) {
@@ -13,12 +14,7 @@ function fetchAlertsAction() {
           dispatch(renderAlertsAction(data));
         },
         error: function(xhr, status, err) {
-          let errStruct = JSON.parse(xhr.responseText);
-          if (errStruct) {
-            hToastr.error(errStruct["error"]);
-          } else {
-            hToastr.error("Unknown error");
-          }
+          outputErrorMsg(xhr.responseText);
         },
       }
     )
@@ -39,12 +35,7 @@ function addAlert() {
           dispatch(fetchAlertsAction());
         }.bind(this),
         error: function(xhr, status, err) {
-          let errStruct = JSON.parse(xhr.responseText);
-          if (errStruct) {
-            hToastr.error(errStruct["error"]);
-          } else {
-            hToastr.error("Unknown error");
-          }
+          outputErrorMsg(xhr.responseText);
         }.bind(this)
       }
     )
@@ -64,12 +55,7 @@ function updateAlert(alertID) {
           dispatch(fetchAlertsAction());
         }.bind(this),
         error: function(xhr, status, err) {
-          let errStruct = JSON.parse(xhr.responseText);
-          if (errStruct) {
-            hToastr.error(errStruct["error"]);
-          } else {
-            hToastr.error("Unknown error");
-          }
+          outputErrorMsg(xhr.responseText);
         }.bind(this)
       }
     )
