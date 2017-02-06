@@ -32,7 +32,7 @@ func (this *UserController) NestPrepare() {
 				validator.Email(authUser.EmailAddress, "email_address")
 			}
 			if authUser.PhoneNumber != "" {
-				validator.Phone(authUser.PhoneNumber, "phone_number")
+				validator.Length(authUser.PhoneNumber, 11, "phone_number")
 			}
 			if validator.HasErrors() {
 				for _, err := range validator.Errors {
