@@ -25,7 +25,7 @@ class SideMenuComponent extends Component {
                 <li className="sidenav-heading">Services</li>
                 <MenuItem icon="icon-bar-chart-o" url="#" handleClick={() => {store.dispatch(fetchGraphiteServices(alertID))}} title="Graphite"/>
                 <MenuItem icon="icon-server" url="#" handleClick={() => {store.dispatch(fetchTCPServices(alertID))}} title="TCP"/>
-                <MenuItem icon="icon-sitemap" url="#" title="HTTP"/>
+                {/*<MenuItem icon="icon-sitemap" url="#" title="HTTP"/>*/}
                 <li className="sidenav-heading">Management</li>
                 <MenuItem icon="icon-font" url="#" handleClick={() => {store.dispatch(fetchTemplates(alertID))}} title="Templates"/>
                 <MenuItem icon="icon-bell" url="#" handleClick={() => {store.dispatch(fetchNotifiers(alertID))}} title="Notifiers"/>

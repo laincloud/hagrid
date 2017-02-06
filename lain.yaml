@@ -1,14 +1,14 @@
 appname: hagrid
 
 build:
-    base: laincloud/centos-lain:20160503
+    base: laincloud/centos-lain:20170103
     prepare:
-        version: 3
+        version: 4
         script:
             - npm install -g webpack webpack-dev-server
             - mkdir -p /go/src/github.com/laincloud
     script:
-        - npm install react react-dom babel-core babel-loader babel-preset-es2015 babel-preset-react
+        - npm install
         - ln -s /lain/app $GOPATH/src/github.com/laincloud/hagrid
         - go build -o hagrid $GOPATH/src/github.com/laincloud/hagrid/main.go
         - webpack
@@ -22,12 +22,12 @@ web:
         - hagrid.conf.json
 
 web.icinga:
-    image: registry.lain.local/centos-lain-icinga2:20160919
+    image: laincloud/centos-lain-icinga2:20170206
     memory: 256M
     cmd: ./run_icinga.sh
     port: 80
     mountpoint:
-        - icinga.lain.cloud
+        - icinga.lain.local
     https_only: true
     stateful: true
     secret_files:

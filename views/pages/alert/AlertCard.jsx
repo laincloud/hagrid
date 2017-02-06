@@ -10,6 +10,14 @@ import { updateAlert } from "../../actions/AlertAction";
 class AlertCardComponent extends Component {
 
   componentDidUpdate() {
+    this.renderAlertInfo();
+  }
+
+  componentDidMount() {
+    this.renderAlertInfo();
+  }
+
+  renderAlertInfo() {
     let curAlert = {};
     let exist = false;
     for (let i = 0; i < this.props.alerts.length; i++) {
@@ -23,7 +31,6 @@ class AlertCardComponent extends Component {
       $("#updateAlertName").val(curAlert["Name"]);
       $("#updateAlertEnabled").prop("checked", curAlert["Enabled"]);
     }
-
   }
 
   render() {

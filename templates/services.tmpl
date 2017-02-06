@@ -1,10 +1,10 @@
 {{ range $service := .Services }}
-apply Service "{{ call $service.GetServiceName }}" {
+apply Service "{{ .GetServiceName }}" {
   import "generic-service"
-  check_command = "{{ call $service.GetServiceCheckCommand }}"
-  max_check_attempts = {{ call $service.GetServiceCheckAttempts }}
-  vars.service_id = "{{ call $service.GetServiceID }}"
-  {{ range $metric_key, $metric_value := call $service.GetServiceVars }}
+  check_command = "{{ .GetServiceCheckCommand }}"
+  max_check_attempts = {{ .GetServiceCheckAttempts }}
+  vars.service_id = "{{ .GetServiceID }}"
+  {{ range $metric_key, $metric_value := .GetServiceVars }}
   vars.{{ $metric_key }} = "{{ $metric_value }}"
   {{ end }}
   assign where host.name == NodeName
