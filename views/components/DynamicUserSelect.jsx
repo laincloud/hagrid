@@ -7,7 +7,7 @@ export default class DynamicUserSelect extends Component {
   componentDidUpdate() {
     $(`#${this.props.id}`).select2({
       theme: "bootstrap",
-      width: "100%",
+      width: "150px",
       placeholder: "Select a user",
       ajax: {
         url: "/api/users/all",
