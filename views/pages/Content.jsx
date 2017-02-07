@@ -1,11 +1,12 @@
 import React, { Component } from "react";
-import {ADMIN_PAGE, ALERT_PAGE, TCP_PAGE, GRAPHITE_PAGE, TEMPLATE_PAGE, NOTIFIER_PAGE} from "../common/Constants";
+import { ADMIN_PAGE, ALERT_PAGE, TCP_PAGE, GRAPHITE_PAGE, TEMPLATE_PAGE, NOTIFIER_PAGE, HELP_PAGE } from "../common/Constants";
 import GraphiteServiceListCard from "./graphite/GraphiteServiceListCard";
 import TCPServiceListCard from "./tcp/TCPServiceListCard";
 import AlertCard from "./alert/AlertCard";
 import TemplateListCard from "./template/TemplateListCard";
 import AdminListCard from "./admin/AdminListCard";
 import NotifierListCard from "./notifier/NotifierListCard";
+import HelpCard from "./help/HelpCard";
 import store from "../common/Store";
 import { connect, Provider } from 'react-redux';
 
@@ -25,6 +26,8 @@ class ContentComponent extends Component {
         return <AdminListCard/>;
       case NOTIFIER_PAGE:
         return <NotifierListCard/>;
+      case HELP_PAGE:
+        return <HelpCard/>;
       default:
         return <AlertCard/>;
     }

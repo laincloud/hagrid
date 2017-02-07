@@ -2,6 +2,7 @@ import { ACTION_FETCH_ALERT_DATA, ACTION_OPEN_ALERT_MODAL, ACTION_CLOSE_ALERT_MO
 import $ from "jquery";
 import hToastr from "../components/HagridToastr";
 import { outputErrorMsg } from "../common/Utils";
+import { switchAlertAction } from "./SideMenuAction";
 
 function fetchAlertsAction() {
   return function(dispatch) {
@@ -11,7 +12,7 @@ function fetchAlertsAction() {
         method: "GET",
         dataType: "json",
         success: function(data) {
-          dispatch(renderAlertsAction(data));
+          dispatch(chooseFirstAlert(data));
         },
         error: function(xhr, status, err) {
           outputErrorMsg(xhr.responseText);
@@ -71,6 +72,15 @@ function openAlertModal() {
 function closeAlertModal() {
   return {
     type: ACTION_CLOSE_ALERT_MODAL,
+  }
+}
+
+function chooseFirstAlert(alerts) {
+  return function(dispatch) {
+    if (alerts.length > 0) {
+      dispatch(switchAlertAction(alerts[0]["ID"]));
+    }
+    dispatch(renderAlertsAction(alerts));
   }
 }
 

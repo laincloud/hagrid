@@ -6,8 +6,16 @@ import UserProfileModal from "../user/UserProfileModal";
 import AlertModal from "../alert/AlertModal";
 import { openUserProfileModal } from "../../actions/UserAction";
 import { openAlertModal } from "../../actions/AlertAction";
+import $ from "jquery";
+import "jquery.cookie";
 
 export default class NavigatorToggleable extends Component {
+
+    logout() {
+      $.removeCookie('session-name', { path: '/' });
+      location.href = "/logout";
+    }
+
     render() {
       return (
         <div className="navbar-toggleable">
@@ -53,10 +61,10 @@ export default class NavigatorToggleable extends Component {
                     <span className="caret"/>
                 </button>
                   <ul className="dropdown-menu dropdown-menu-right">
-                    <li><a href="#" onClick={() => store.dispatch(openUserProfileModal())}>Profile</a></li>
-                    <li><a href="#" onClick={() => store.dispatch(openAlertModal())}>Add alert</a></li>
+                    <li><a onClick={() => store.dispatch(openUserProfileModal())}>Profile</a></li>
+                    <li><a onClick={() => store.dispatch(openAlertModal())}>Add alert</a></li>
                     <li className="divider"/>
-                    <li><a href="/logout">Sign out</a></li>
+                    <li><a onClick={this.logout}>Sign out</a></li>
                   </ul>
               </li>
             </ul>

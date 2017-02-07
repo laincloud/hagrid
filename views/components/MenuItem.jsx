@@ -7,7 +7,7 @@ class MenuItem extends Component {
     const title = this.props.title;
     return (
       <li className="sidenav-item">
-        <a href="#" onClick={this.props.handleClick}>
+        <a onClick={this.props.handleClick}>
           <span className={icon}/>
           <span className="sidenav-label">{title}</span>
         </a>
