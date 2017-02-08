@@ -31,7 +31,7 @@ class HelpCardComponent extends Component {
       <div>
         <div className="title-bar">
           <h1 className="title-bar-title">
-            <span className="d-ib">User Manual</span>
+            <span className="d-ib">Hagrid 2.0</span>
           </h1>
         </div>
         <div className="row gutter-xs">
