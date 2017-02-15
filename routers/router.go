@@ -45,6 +45,9 @@ func init() {
 			beego.NSRouter("/:user_mode(me|all)", &controllers.UserController{}, "get:Get"),
 			beego.NSRouter("/", &controllers.UserController{}, "put:Put"),
 		),
+		beego.NSNamespace("/health",
+			beego.NSRouter("/", &controllers.HealthController{}, "get:Get"),
+		),
 	)
 	beego.AddNamespace(apiNs)
 	beego.Router("/", &controllers.SiteController{}, "get:Home")
