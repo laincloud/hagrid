@@ -3,6 +3,7 @@ import $ from "jquery";
 import hToastr from "../components/HagridToastr";
 import { outputErrorMsg } from "../common/Utils";
 import { switchAlertAction } from "./SideMenuAction";
+import store from "../common/Store";
 
 function fetchAlertsAction() {
   return function(dispatch) {
@@ -77,7 +78,7 @@ function closeAlertModal() {
 
 function chooseFirstAlert(alerts) {
   return function(dispatch) {
-    if (alerts.length > 0) {
+    if (alerts.length > 0 && store.getState().sideMenuReducer.alertID == 0) {
       dispatch(switchAlertAction(alerts[0]["ID"]));
     }
     dispatch(renderAlertsAction(alerts));
