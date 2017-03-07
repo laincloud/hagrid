@@ -119,9 +119,13 @@ func (tcpS Icinga2TCPService) GetServiceResendTime() int {
 	return tcpS.ResendTime
 }
 
-func (tcps Icinga2TCPService) GetServiceVars() map[string]interface{} {
+func (tcpS Icinga2TCPService) GetServiceVars() map[string]interface{} {
 	return map[string]interface{}{
-		"metric_host": tcps.Host,
-		"metric_port": tcps.Port,
+		"metric_host": tcpS.Host,
+		"metric_port": tcpS.Port,
 	}
+}
+
+func (tcpS Icinga2TCPService) GetServiceNonStrVars() map[string]interface{} {
+	return map[string]interface{}{}
 }

@@ -144,3 +144,7 @@ func (gs Icinga2GraphiteService) GetServiceVars() map[string]interface{} {
 		"metric_type":     gs.MetricType,
 	}
 }
+
+func (gs Icinga2GraphiteService) GetServiceNonStrVars() map[string]interface{} {
+	return map[string]interface{}{}
+}

@@ -1,9 +1,7 @@
-import React from "react";
+import React, { Component } from "react";
 
-let FooterPage = React.createClass({
-    render() {
-        return <div></div>
-    },
-});
-
-export default FooterPage;
+export default class FooterPage extends Component {
+  render() {
+    return <div></div>
+  }
+}

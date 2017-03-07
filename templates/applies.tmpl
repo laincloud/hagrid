@@ -1,4 +1,4 @@
-{{ range $apply := .Applies }}
+{{- range $apply := .Applies }}
 apply Notification "{{$apply.Name}}" to Service {
   import "{{$apply.NotificationType}}-service-notification"
   user_groups = []
@@ -6,5 +6,4 @@ apply Notification "{{$apply.Name}}" to Service {
   interval = {{$apply.Interval}}
   assign where service.name == "{{$apply.ServiceName}}"
 }
-
-{{end}}
+{{ end }}

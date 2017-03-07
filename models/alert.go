@@ -15,6 +15,7 @@ type Alert struct {
 	Enabled          bool              `gorm:"not null" form:"enabled"`
 	GraphiteServices []GraphiteService `gorm:"ForeignKey:AlertID" form:"-"`
 	TCPServices      []TCPService      `gorm:"ForeignKey:AlertID" form:"-"`
+	HTTPServices     []HTTPService     `gorm:"ForeignKey:AlertID" form:"-"`
 	Templates        []Template        `gorm:"ForeignKey:AlertID" form:"-"`
 	Notifiers        []User            `gorm:"many2many:alert_to_user_notify" form:"-"`
 	Admins           []User            `gorm:"many2many:alert_to_user_admin" form:"-"`
@@ -71,6 +72,11 @@ func (al *Alert) generateIcinga2Config() ([]Icinga2Apply, []Icinga2Service) {
 		icinga2Services = append(icinga2Services, generatedService...)
 	}
 
+	for _, https := range al.HTTPServices {
+		generatedService := https.GenerateServices(al.Templates)
+		icinga2Services = append(icinga2Services, generatedService...)
+	}
+
 	for _, icgs := range icinga2Services {
 		icinga2Applies = append(icinga2Applies, generateApplies(notifiersStr, icgs)...)
 	}
@@ -111,6 +117,9 @@ func GetDetailedAlert(alert *Alert, id int) error {
 		return err
 	}
 	if err := db.Model(alert).Association("TCPServices").Find(&(alert.TCPServices)).Error; err != nil {
+		return err
+	}
+	if err := db.Model(alert).Association("HTTPServices").Find(&(alert.HTTPServices)).Error; err != nil {
 		return err
 	}
 	if err := db.Model(alert).Association("Templates").Find(&(alert.Templates)).Error; err != nil {

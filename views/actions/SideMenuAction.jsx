@@ -1,7 +1,8 @@
-import { ACTION_OPEN_CONTENT, ACTION_SWITCH_ALERT, GRAPHITE_PAGE, TCP_PAGE, TEMPLATE_PAGE, ADMIN_PAGE, NOTIFIER_PAGE } from "../common/Constants";
+import { ACTION_OPEN_CONTENT, ACTION_SWITCH_ALERT, GRAPHITE_PAGE, TCP_PAGE, HTTP_PAGE, TEMPLATE_PAGE, ADMIN_PAGE, NOTIFIER_PAGE } from "../common/Constants";
 import store from "../common/Store";
 import { fetchGraphiteServices } from "./GraphiteServiceAction";
 import { fetchTCPServices } from "./TCPServiceAction";
+import { fetchHTTPServices } from "./HTTPServiceAction";
 import { fetchTemplates } from "./TemplateAction";
 import { fetchAdmins } from "./AdminAction";
 import { fetchNotifiers } from "./NotifierAction";
@@ -23,6 +24,9 @@ function refreshContentAction(alertID) {
         break;
       case TCP_PAGE:
         dispatch(fetchTCPServices(alertID));
+        break;
+      case HTTP_PAGE:
+        dispatch(fetchHTTPServices(alertID));
         break;
       case TEMPLATE_PAGE:
         dispatch(fetchTemplates(alertID));

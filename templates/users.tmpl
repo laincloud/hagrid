@@ -1,4 +1,4 @@
-{{range $user := .Users}}
+{{- range $user := .Users }}
 object User "{{$user.Name}}" {
   import "generic-user"
   email = "{{$user.EmailAddress}}"
@@ -11,5 +11,4 @@ object User "{{$user.Name}}" {
   vars.slack_channel = "{{$user.SlackChannel}}"
   vars.slack_token = "{{$user.SlackToken}}"
 }
-
 {{ end }}

@@ -4,13 +4,13 @@ import MainPage from "./Main";
 import FooterPage from "./Footer";
 
 export default class BodyPage extends Component {
-    render() {
-        return (
-          <div>
-              <HeaderPage/>
-              <MainPage />
-              <FooterPage />
-          </div>
-        )
-    }
+  render() {
+    return (
+      <div>
+        <HeaderPage/>
+        <MainPage />
+        <FooterPage />
+      </div>
+    )
+  }
 }

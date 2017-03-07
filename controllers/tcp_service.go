@@ -95,15 +95,15 @@ func (this *TCPServiceController) Get() {
 	tcpServiceIDStr := this.Ctx.Input.Param(":tcps_id")
 	alertIDStr := this.Ctx.Input.Param(":alert_id")
 	if tcpServiceIDStr == "all" {
-		var gss []models.TCPService
+		var tss []models.TCPService
 		alertID, _ := strconv.Atoi(alertIDStr)
-		if err := models.GetAllTCPServicesByAlertID(alertID, &gss); err == gorm.ErrRecordNotFound {
+		if err := models.GetAllTCPServicesByAlertID(alertID, &tss); err == gorm.ErrRecordNotFound {
 			this.outputError(http.StatusNotFound, errorMsg404)
 		} else if err != nil {
 			controllerLogger.Printf("GetAllTCPServices failed: %s", err.Error())
 			this.outputError(http.StatusInternalServerError, errorMsg500)
 		} else {
-			this.outputSuccess(http.StatusOK, &gss)
+			this.outputSuccess(http.StatusOK, &tss)
 		}
 	} else {
 		var tcps models.TCPService

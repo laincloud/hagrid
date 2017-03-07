@@ -6,6 +6,7 @@ import store from "../common/Store";
 import { openContentAction } from "../actions/SideMenuAction";
 import { fetchGraphiteServices } from "../actions/GraphiteServiceAction"
 import { fetchTCPServices } from "../actions/TCPServiceAction";
+import { fetchHTTPServices } from "../actions/HTTPServiceAction";
 import { fetchTemplates } from "../actions/TemplateAction";
 import { fetchAdmins } from "../actions/AdminAction";
 import { fetchNotifiers } from "../actions/NotifierAction";
@@ -25,7 +26,7 @@ class SideMenuComponent extends Component {
                 <li className="sidenav-heading">Services</li>
                 <MenuItem icon="icon-bar-chart-o" handleClick={() => {store.dispatch(fetchGraphiteServices(alertID))}} title="Graphite"/>
                 <MenuItem icon="icon-server" handleClick={() => {store.dispatch(fetchTCPServices(alertID))}} title="TCP"/>
-                {/*<MenuItem icon="icon-sitemap" title="HTTP"/>*/}
+                <MenuItem icon="icon-sitemap" handleClick={() => {store.dispatch(fetchHTTPServices(alertID))}} title="HTTP"/>
                 <li className="sidenav-heading">Management</li>
                 <MenuItem icon="icon-font" handleClick={() => {store.dispatch(fetchTemplates(alertID))}} title="Templates"/>
                 <MenuItem icon="icon-bell" handleClick={() => {store.dispatch(fetchNotifiers(alertID))}} title="Notifiers"/>

@@ -7,68 +7,64 @@ import AlertModal from "../alert/AlertModal";
 import { openUserProfileModal } from "../../actions/UserAction";
 import { openAlertModal } from "../../actions/AlertAction";
 import $ from "jquery";
+import "bootstrap";
 import "jquery.cookie";
 
 export default class NavigatorToggleable extends Component {
 
-    logout() {
-      $.removeCookie('session-name', { path: '/' });
-      location.href = "/logout";
-    }
+  componentDidMount() {
+    $('.dropdown-toggle').dropdown();
+  }
 
-    render() {
-      return (
-        <div className="navbar-toggleable">
-          <nav id="navbar" className="navbar-collapse collapse">
-            <button className="sidenav-toggler hidden-xs" title="Collapse sidenav ( [ )" aria-expanded="true" type="button">
-              <span className="sr-only">Toggle navigation</span>
-              <span className="bars">
-                <span className="bar-line bar-line-1 out"/>
-                <span className="bar-line bar-line-2 out"/>
-                <span className="bar-line bar-line-3 out"/>
-                <span className="bar-line bar-line-4 in"/>
-                <span className="bar-line bar-line-5 in"/>
-                <span className="bar-line bar-line-6 in"/>
-              </span>
-            </button>
-            <ul className="nav navbar-nav navbar-right">
-              <li className="visible-xs-block">
-                <h4 className="navbar-text text-center">Hi, Teddy Wilson</h4>
-              </li>
-              <li className="hidden-xs hidden-sm">
-                <form className="navbar-search" aria-expanded="true">
-                  <div className="navbar-search-group">
-                    <div className="input-group">
+
+  logout() {
+    $.removeCookie('session-name', {path: '/'});
+    location.href = "/logout";
+  }
+
+  render() {
+    return (
+      <div className="navbar-toggleable">
+        <nav id="navbar" className="navbar-collapse collapse">
+          <ul className="nav navbar-nav navbar-right">
+            <li className="visible-xs-block">
+              <h4 className="navbar-text text-center">Hi, Teddy Wilson</h4>
+            </li>
+            <li className="hidden-xs hidden-sm">
+              <form className="navbar-search" aria-expanded="true">
+                <div className="navbar-search-group">
+                  <div className="input-group">
                       <span className="input-group-addon">
                         <span className="icon icon-database icon-lg"/>
                       </span>
-                      <Provider store={store}>
-                        <AlertSelector />
-                      </Provider>
-                      <Provider store={store}>
-                        <UserProfileModal />
-                      </Provider>
-                      <Provider store={store}>
-                        <AlertModal />
-                      </Provider>
-                    </div>
+                    <Provider store={store}>
+                      <AlertSelector />
+                    </Provider>
+                    <Provider store={store}>
+                      <UserProfileModal />
+                    </Provider>
+                    <Provider store={store}>
+                      <AlertModal />
+                    </Provider>
                   </div>
-                </form>
-              </li>
-              <li className="dropdown hidden-xs">
-                <button className="navbar-account-btn" data-toggle="dropdown" aria-haspopup="true">
-                  <img className="rounded" width="36" height="36" src="static/img/0180441436.jpg" alt="Teddy Wilson"/> Settings
-                    <span className="caret"/>
-                </button>
-                  <ul className="dropdown-menu dropdown-menu-right">
-                    <li><a onClick={() => store.dispatch(openUserProfileModal())}>Profile</a></li>
-                    <li><a onClick={() => store.dispatch(openAlertModal())}>Add alert</a></li>
-                    <li className="divider"/>
-                    <li><a onClick={this.logout}>Sign out</a></li>
-                  </ul>
-              </li>
-            </ul>
-          </nav>
-        </div>)
-    }
+                </div>
+              </form>
+            </li>
+            <li className="dropdown hidden-xs">
+              <button className="navbar-account-btn" data-toggle="dropdown" aria-haspopup="true">
+                <img className="rounded" width="36" height="36" src="static/img/0180441436.jpg" alt="Teddy Wilson"/>
+                Settings
+                <span className="caret"/>
+              </button>
+              <ul className="dropdown-menu dropdown-menu-right">
+                <li><a onClick={() => store.dispatch(openUserProfileModal())}>Profile</a></li>
+                <li><a onClick={() => store.dispatch(openAlertModal())}>Add alert</a></li>
+                <li className="divider"/>
+                <li><a onClick={this.logout}>Sign out</a></li>
+              </ul>
+            </li>
+          </ul>
+        </nav>
+      </div>)
+  }
 }

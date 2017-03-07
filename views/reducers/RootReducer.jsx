@@ -3,6 +3,7 @@ import sideMenuReducer from "./SideMenuReducer";
 import alertReducer from "./AlertReducer";
 import { graphiteServiceReducer, graphiteServiceListReducer } from "./GraphiteServiceReducer";
 import { tcpServiceReducer, tcpServiceListReducer } from "./TCPServiceReducer";
+import { httpServiceReducer, httpServiceListReducer, httpTestReducer } from "./HTTPServiceReducer";
 import { templateReducer, templateListReducer } from "./TemplateReducer";
 import userReducer from "./UserReducer";
 import adminReducer from "./AdminReducer";
@@ -15,6 +16,9 @@ const RootReducer = combineReducers({
   graphiteServiceListReducer,
   tcpServiceReducer,
   tcpServiceListReducer,
+  httpServiceReducer,
+  httpServiceListReducer,
+  httpTestReducer,
   templateReducer,
   templateListReducer,
   userReducer,
