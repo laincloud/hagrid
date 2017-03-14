@@ -10,7 +10,9 @@ apply Service "{{ .GetServiceName }}" {
     {{- end }}
   {{- end }}
   {{- range $metric_key, $metric_value := .GetServiceNonStrVars }}
+    {{- if $metric_value }}
   vars.{{ $metric_key }} = {{ $metric_value }}
+    {{- end }}
   {{- end }}
   assign where host.name == NodeName
 }

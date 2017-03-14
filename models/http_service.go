@@ -195,6 +195,10 @@ func (httpS Icinga2HTTPService) GetServiceVars() map[string]interface{} {
 }
 
 func (httpS Icinga2HTTPService) GetServiceNonStrVars() map[string]interface{} {
+	var headerStr string
+	if len(httpS.Params.Header) > 0 {
+		headerStr = fmt.Sprintf("[\"%s\"]", strings.Join(httpS.Params.Header, "\",\""))
+	}
 	return map[string]interface{}{
 		"port":         httpS.Params.Port,
 		"use_ipv4":     httpS.Params.UseIPv4,
@@ -203,7 +207,7 @@ func (httpS Icinga2HTTPService) GetServiceNonStrVars() map[string]interface{} {
 		"ignore_body":  httpS.Params.IgnoreBody,
 		"linespan":     httpS.Params.LineSpan,
 		"invert_regex": httpS.Params.InvertRegex,
-		"headers":      fmt.Sprintf("[\"%s\"]", strings.Join(httpS.Params.Header, "\",\"")),
+		"headers":      headerStr,
 		"wrap_link":    httpS.Params.WrapLink,
 	}
 }
