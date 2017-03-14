@@ -5,7 +5,6 @@ import store from "../../common/Store";
 import SimpleButton from "../../components/SimpleButton";
 import NumberInput from "../../components/NumberInput";
 import TextInput from "../../components/TextInput";
-import TextArea from "../../components/TextArea";
 import CheckBox from "../../components/CheckBox";
 import AlertFont from "../../components/AlertFont";
 import HTTPServiceTestTextArea from "./HTTPServiceTestTextArea";
@@ -32,7 +31,14 @@ class HTTPServiceModalComponent extends Component {
         <Modal.Body>
           <form id="httpForm" className="form form-horizontal">
             <TextInput id="httpName" name="name" title="Name" width="9" defaultValue={isUpdate ? this.props.serviceData["Name"] : ""}/>
-            <TextArea id="httpParameters" name="parameters" title="Parameters" width="9" rows="10" defaultValue={isUpdate ? this.props.serviceData["Parameters"] : ""} />
+            <div className="form-group has-default">
+              <label className="col-sm-3 control-label" htmlFor="httpTestResult">Test Result</label>
+              <div className={`col-sm-9`}>
+                <textarea id="httpParameters" name="parameters" rows="10" width="9" className="form-control" defaultValue={isUpdate ? this.props.serviceData["Parameters"] : ""} />
+                <p className="help-block"> <a href="https://www.monitoring-plugins.org/doc/man/check_http.html" target="_blank">Read the check_http manual.</a></p>
+              </div>
+
+            </div>
             <NumberInput id="httpCheckAttempts" name="check_attempts" title="Check Attempts" className="form-control" type="text" defaultValue={isUpdate ? this.props.serviceData["CheckAttempts"] : 3} minValue={1} maxValue={30} postfix="time(s)" btStyle={STYLE_SUCCESS}/>
             <NumberInput id="httpResendTime" name="resend_time" title="Resend Time" className="form-control" type="text" defaultValue={isUpdate ? this.props.serviceData["ResendTime"] : 10} minValue={0} maxValue={60} postfix="minute(s)" btStyle={STYLE_SUCCESS}/>
             <CheckBox id="httpEnabled" name="enabled" title="Enabled" cbStyle={STYLE_SUCCESS} isChecked={isUpdate ? this.props.serviceData["Enabled"] : false}/>
