@@ -32,7 +32,7 @@ class HTTPServiceModalComponent extends Component {
           <form id="httpForm" className="form form-horizontal">
             <TextInput id="httpName" name="name" title="Name" width="9" defaultValue={isUpdate ? this.props.serviceData["Name"] : ""}/>
             <div className="form-group has-default">
-              <label className="col-sm-3 control-label" htmlFor="httpTestResult">Test Result</label>
+              <label className="col-sm-3 control-label" htmlFor="httpParameters">Parameters</label>
               <div className={`col-sm-9`}>
                 <textarea id="httpParameters" name="parameters" rows="10" width="9" className="form-control" defaultValue={isUpdate ? this.props.serviceData["Parameters"] : ""} />
                 <p className="help-block"> <a href="https://www.monitoring-plugins.org/doc/man/check_http.html" target="_blank">Read the check_http manual.</a></p>
