@@ -180,7 +180,7 @@ func (httpS Icinga2HTTPService) GetServiceVars() map[string]interface{} {
 		"header_expect":  httpS.Params.HeaderExpect,
 		"content_expect": httpS.Params.ContentExpect,
 		"uri":            httpS.Params.URI,
-		"post_data":      httpS.Params.PostData,
+		"post":           httpS.Params.PostData,
 		"method":         httpS.Params.Method,
 		"max_age":        httpS.Params.MaxAge,
 		"content_type":   httpS.Params.ContentType,
