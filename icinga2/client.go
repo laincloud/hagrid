@@ -4,8 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"net"
 	"net/http"
+	"net/url"
 	"strings"
+	"time"
 )
 
 type Icinga2Client struct {
@@ -108,6 +111,22 @@ func (ic *Icinga2Client) CheckPackageStatus(pkgName, curStage string) error {
 	if curPkg.ActiveStage != curStage {
 		return fmt.Errorf("the expected stage %s is not matched the actual %s", curStage, curPkg.ActiveStage)
 	}
+	return nil
+}
+
+func (ic *Icinga2Client) CheckHealth() error {
+	var (
+		err       error
+		serverURL *url.URL
+		conn      net.Conn
+	)
+	if serverURL, err = url.Parse(ic.Address); err != nil {
+		return err
+	}
+	if conn, err = net.DialTimeout("tcp", serverURL.Host, 3*time.Second); err != nil {
+		return err
+	}
+	conn.Close()
 	return nil
 }
 

@@ -6,3 +6,6 @@ hagrid
 hagrid.conf.json
 hagrid.iml
 node_modules/
+hagrid.exe
+npm-debug.log
+static/css/demo.css

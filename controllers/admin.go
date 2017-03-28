@@ -1,91 +1,100 @@
 package controllers
 
 import (
-	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 
-	"github.com/gorilla/mux"
+	"github.com/astaxie/beego/validation"
+	"github.com/jinzhu/gorm"
 	"github.com/laincloud/hagrid/models"
 )
 
-func AddAdminHandler(w http.ResponseWriter, r *http.Request) {
-	alertID, _ := strconv.Atoi(r.URL.Query().Get("alert_id"))
+type AdminController struct {
+	AuthController
+}
+
+func (this *AdminController) NestPrepare() {
 	var adminID int
-
-	_, err := authorize(w, r, alertID)
-	if err != nil {
-		return
+	if this.Ctx.Input.IsPost() {
+		validator := validation.Validation{}
+		adminIDStr := this.GetString("admin_id")
+		validator.Required(adminIDStr, "admin_id")
+		validator.Numeric(adminIDStr, "admin_id")
+		if validator.HasErrors() {
+			for _, err := range validator.Errors {
+				this.outputError(http.StatusBadRequest, fmt.Sprintf("[%s]%s", err.Key, err.Message))
+				this.ServeJSON()
+				this.StopRun()
+			}
+		}
+		adminID, _ = strconv.Atoi(adminIDStr)
+	} else {
+		adminID, _ = strconv.Atoi(this.Ctx.Input.Param(":admin_id"))
+		if this.Ctx.Input.IsDelete() {
+			authUser := this.Ctx.Input.GetData("auth_user").(*models.User)
+			if authUser.ID == adminID {
+				this.outputError(http.StatusForbidden, errorMsg403)
+				this.ServeJSON()
+				this.StopRun()
+			}
+		}
 	}
-
-	if adminID, err = strconv.Atoi(r.FormValue("adminID")); err != nil {
-		writeResponse(w, "Field user_id must be an integer", http.StatusBadRequest)
-		return
+	if isSuper, err := models.IsSuperUser(adminID); isSuper {
+		this.outputError(http.StatusForbidden, errorMsg403)
+		this.ServeJSON()
+		this.StopRun()
+	} else if err != nil {
+		this.outputError(http.StatusInternalServerError, errorMsg500)
+		this.ServeJSON()
+		this.StopRun()
+	} else {
+		this.Ctx.Input.SetData("adminID", adminID)
 	}
-
-	if models.IsAdminDuplicated(alertID, adminID) {
-		writeResponse(w, "The admin is duplicated in this alert", http.StatusConflict)
-		return
-	}
-
-	if err = models.AddAdmin(alertID, adminID); err != nil {
-		writeResponse(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	writeResponse(w, "Add administrator successfully", http.StatusCreated)
 }
 
-func DeleteAdminHandler(w http.ResponseWriter, r *http.Request) {
-
-	alertID, _ := strconv.Atoi(r.URL.Query().Get("alert_id"))
-
-	user, err := authorize(w, r, alertID)
-	if err != nil {
-		return
+func (this *AdminController) Post() {
+	adminID := this.Ctx.Input.GetData("adminID").(int)
+	alertID, _ := strconv.Atoi(this.Ctx.Input.Param(":alert_id"))
+	if err := models.AddAdmin(alertID, adminID); err == models.ErrorDuplicatedName {
+		this.outputError(http.StatusConflict, errorMsg409)
+	} else if err == gorm.ErrRecordNotFound {
+		this.outputError(http.StatusNotFound, errorMsg404)
+	} else if err != nil {
+		controllerLogger.Printf("PostAdmin failed: %s", err.Error())
+		this.outputError(http.StatusInternalServerError, errorMsg500)
+	} else {
+		this.outputSuccess(http.StatusCreated, map[string]string{
+			"message": "Add admin successfully",
+		})
 	}
-
-	vars := mux.Vars(r)
-	id, _ := strconv.Atoi(vars["id"])
-
-	if id == user.ID {
-		writeResponse(w, "You can't delete yourself!", http.StatusForbidden)
-		return
-	}
-
-	if err = models.DeleteAdmin(alertID, id); err != nil {
-		writeResponse(w, err.Error(), http.StatusForbidden)
-		return
-	}
-	writeResponse(w, "Delete administrator successfully", http.StatusNoContent)
+	this.ServeJSON()
 }
 
-func GetAdminsHandler(w http.ResponseWriter, r *http.Request) {
-	alertID, _ := strconv.Atoi(r.URL.Query().Get("alert_id"))
-	var (
-		admins []models.User
-		err    error
-		data   []byte
-	)
+func (this *AdminController) Delete() {
+	adminID := this.Ctx.Input.GetData("adminID").(int)
+	alertID, _ := strconv.Atoi(this.Ctx.Input.Param(":alert_id"))
+	if err := models.DeleteAdmin(alertID, adminID); err == gorm.ErrRecordNotFound {
+		this.outputError(http.StatusNotFound, errorMsg404)
+	} else if err != nil {
+		controllerLogger.Printf("DeleteAdmin failed: %s", err.Error())
+		this.outputError(http.StatusInternalServerError, errorMsg500)
+	} else {
+		this.outputSuccess(http.StatusNoContent, succMsg204)
+	}
+	this.ServeJSON()
+}
 
-	if err = models.GetAdminsByAlertID(alertID, &admins); err != nil {
-		writeResponse(w, err.Error(), http.StatusInternalServerError)
-		return
+func (this *AdminController) Get() {
+	alertID, _ := strconv.Atoi(this.Ctx.Input.Param(":alert_id"))
+	var admins []models.User
+	if err := models.GetAdminsByAlertID(alertID, &admins); err == gorm.ErrRecordNotFound {
+		this.outputError(http.StatusNotFound, errorMsg404)
+	} else if err != nil {
+		controllerLogger.Printf("GetAdmins failed: %s", err.Error())
+		this.outputError(http.StatusInternalServerError, errorMsg500)
+	} else {
+		this.outputSuccess(http.StatusOK, &admins)
 	}
-
-	briefUsers := make([]UserMV, 0, len(admins))
-	for _, user := range admins {
-		briefUsers = append(
-			briefUsers,
-			UserMV{
-				ID:   user.ID,
-				Name: user.Name,
-			},
-		)
-	}
-	if data, err = json.Marshal(briefUsers); err != nil {
-		writeResponse(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	w.WriteHeader(http.StatusOK)
-	w.Write(data)
+	this.ServeJSON()
 }

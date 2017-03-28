@@ -2,13 +2,15 @@ package models
 
 import (
 	"bytes"
-	"crypto/tls"
+	"errors"
 	"fmt"
 	"net/http"
 	"path/filepath"
 	"sync"
 	"text/template"
 	"time"
+
+	"crypto/tls"
 
 	"github.com/jinzhu/gorm"
 	"github.com/laincloud/hagrid/config"
@@ -21,10 +23,25 @@ const (
 )
 
 var (
-	db            *gorm.DB
-	icinga2Client icinga2.Icinga2Client
-	syncLock      *sync.Mutex
+	db                  *gorm.DB
+	icinga2Client       icinga2.Icinga2Client
+	syncLock            *sync.Mutex
+	ErrorDuplicatedName = errors.New("The name is duplicated")
 )
+
+type Icinga2Service interface {
+	GetServiceID() string
+	GetServiceName() string
+	GetServiceCheckCommand() string
+	GetServiceCheckAttempts() int
+	GetServiceResendTime() int
+	GetServiceVars() map[string]interface{}
+	GetServiceNonStrVars() map[string]interface{}
+}
+
+type Icinga2TemplatedService interface {
+	GenerateServices(templates []Template) []Icinga2Service
+}
 
 func init() {
 	var err error
@@ -43,15 +60,20 @@ func init() {
 
 	if config.GetDatabaseMigrate() {
 		db.Set("gorm:table_options", "ENGINE=InnoDB DEFAULT CHARSET=utf8").AutoMigrate(
-			&User{}, &Alert{}, &Service{}, &Template{},
+			&User{}, &Alert{}, &GraphiteService{}, &Template{}, &TCPService{}, &HTTPService{},
 		)
-		db.Model(&Service{}).AddForeignKey("alert_id", "alerts(id)", "CASCADE", "RESTRICT")
+		db.Model(&GraphiteService{}).AddForeignKey("alert_id", "alerts(id)", "CASCADE", "RESTRICT")
+		db.Model(&Template{}).AddForeignKey("alert_id", "alerts(id)", "CASCADE", "RESTRICT")
+		db.Model(&TCPService{}).AddForeignKey("alert_id", "alerts(id)", "CASCADE", "RESTRICT")
+		db.Model(&HTTPService{}).AddForeignKey("alert_id", "alerts(id)", "CASCADE", "RESTRICT")
 		db.Table("alert_to_user_admin").AddForeignKey("alert_id", "alerts(id)", "CASCADE", "RESTRICT")
 		db.Table("alert_to_user_admin").AddForeignKey("user_id", "users(id)", "CASCADE", "RESTRICT")
 		db.Table("alert_to_user_notify").AddForeignKey("alert_id", "alerts(id)", "CASCADE", "RESTRICT")
 		db.Table("alert_to_user_notify").AddForeignKey("user_id", "users(id)", "CASCADE", "RESTRICT")
 		db.Model(&Template{}).AddUniqueIndex("unique_alert_template", "alert_id", "name")
-		db.Model(&Service{}).AddUniqueIndex("unique_alert_service", "alert_id", "name")
+		db.Model(&GraphiteService{}).AddUniqueIndex("unique_alert_graphiteservice", "alert_id", "name")
+		db.Model(&TCPService{}).AddUniqueIndex("unique_alert_tcpservice", "alert_id", "name")
+		db.Model(&HTTPService{}).AddUniqueIndex("unique_alert_httpservice", "alert_id", "name")
 	}
 
 	icinga2Client.Address = config.GetIcinga2APIAddress()
